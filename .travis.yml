@@ -1,0 +1,37 @@
+sudo: false
+
+language: node_js
+
+node_js: 
+  - "stable"
+
+services:
+  - postgresql
+
+notifications:
+  email: false
+
+install:
+  - npm install
+
+env:
+  global:
+    - SECRET_KEY=WAYFARER
+    - PORT=5000
+    - CC_TEST_REPORTER_ID=e93a087107d4b00f3fba4fc5cfe6bbe8c09a539a8a04d7f26c7f1fb4c7471212
+    - NODE_ENV=test
+    - DATABASE_URL=postgres://postgres@127.0.0.1:5432/way_farer
+    
+before_script:
+  - yarn global add nyc
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  - psql -c 'create database way_farer;' -U postgres
+  - npm run refresh
+
+script:
+ - npm run coveralls
+ - npm run coverage
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
