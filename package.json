@@ -1,7 +1,7 @@
 {
-  "name": "wayfarer",
+  "name": "Way-Farer",
   "version": "1.0.0",
-  "description": "WayFarer is a public bus transportation booking server.",
+  "description": "Way-Farer is a public bus transportation booking server.",
   "main": "./server/index.js",
   "scripts": {
     "build": "rimraf ./dist/ && babel server --out-dir dist",
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/joaquinto/Way-Farer.git"
   },
   "keywords": [
-    "wayFarer",
+    "way-Farer",
     "test",
     "travis",
     "coverall",

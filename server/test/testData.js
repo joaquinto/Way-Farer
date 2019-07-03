@@ -73,6 +73,52 @@ const data = {
     email: 'drakelawson@gmail.com',
     password: '',
   },
+  signIn: {
+    email: 'drakelawson@gmail.com',
+    password: 'Drake2019',
+  },
+  signInWithWrongPassword: {
+    email: 'drakelawson@gmail.com',
+    password: 'Drake20195',
+  },
+  client: {
+    email: 'johngabriel@gmail.com',
+    password: 'john2019',
+  },
+  missingEmail: {
+    password: 'Drake2019',
+  },
+  emptyEmail: {
+    email: '',
+    password: 'Drake2019',
+  },
+  missingPassword: {
+    email: 'drakelawson@gmail.com',
+  },
+  emptyPassword: {
+    email: 'drakelawson@gmail.com',
+    password: '',
+  },
+  invalidEmail: {
+    email: 'fuehfejifhei',
+    password: 'Drake2019',
+  },
+  uInvalidPassword: {
+    email: 'drakelawson@gmail.com',
+    password: 'drake2019',
+  },
+  lInvalidPassword: {
+    email: 'drakelawson@gmail.com',
+    password: 'DRAKE2019',
+  },
+  dInvalidPassword: {
+    email: 'drakelawson@gmail.com',
+    password: 'Drakes',
+  },
+  ldInvalidPassword: {
+    email: 'drakelawson@gmail.com',
+    password: 'Dr29',
+  },
 };
 
 export default data;

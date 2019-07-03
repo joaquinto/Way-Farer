@@ -17,4 +17,18 @@ export default class Authentication {
       return next(error);
     }
   }
+
+  static async notAUser(req, res, next) {
+    const userEmail = req.body.email;
+    try {
+      const { rows } = await query(findUserByEmail, [userEmail]);
+      if (rows.length < 1) {
+        return res.status(404).json({ status: 404, error: 'User Not Found' });
+      }
+      req.user = rows;
+      return next();
+    } catch (error) {
+      return next(error);
+    }
+  }
 }

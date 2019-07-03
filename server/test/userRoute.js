@@ -132,3 +132,99 @@ describe('Sign Up', () => {
     assert.equal((res.body.error), 'Page not found');
   });
 });
+
+describe('Signing In', () => {
+  let request;
+  beforeEach(() => {
+    request = chai.request(app);
+  });
+
+  it('should throw an error for missing email', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.missingEmail);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for empty email', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.emptyEmail);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for missing password', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.missingPassword);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for empty password', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.emptyPassword);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for invalid email', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.invalidEmail);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for missing uppercase password', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.uInvalidPassword);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for missing lowercase password', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.lInvalidPassword);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for missing digit password', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.dInvalidPassword);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for less than 6 password length', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.ldInvalidPassword);
+    assert.equal((res.body.status), 400);
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for wrong password', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.signInWithWrongPassword);
+    assert.equal((res.body.status), 405);
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return the user object', async () => {
+    const res = await request
+      .post('/api/v1/auth/signin')
+      .send(data.signIn);
+    assert.equal((res.body.status), 200);
+    assert.property((res.body), 'status');
+    assert.property((res.body), 'message');
+  });
+});

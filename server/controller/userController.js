@@ -4,7 +4,7 @@ import jwtTokenUtils from '../helpers/jwtTokenUtils';
 import passwordUtils from '../helpers/passwordUtils';
 
 const { query } = db;
-const { createUser } = user;
+const { createUser, findUserByEmail } = user;
 const { signToken } = jwtTokenUtils;
 
 export default class UserController {
@@ -33,6 +33,35 @@ export default class UserController {
         admin,
       };
       return res.status(201).json({ status: 201, message: 'User created successfully', data });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async signIn(req, res, next) {
+    const message = 'User password does not match';
+    const userEmail = req.body.email.toLowerCase();
+    const userPassword = req.body.password;
+    try {
+      const { rows } = await query(findUserByEmail, [userEmail]);
+      const [{
+        id, firstname, lastname, email, password,
+        admin,
+      }] = rows;
+      const isMatch = await passwordUtils.comparePassword(userPassword, password);
+      if (isMatch) {
+        const token = signToken(id, email, admin);
+        const data = {
+          token,
+          id,
+          firstname,
+          lastname,
+          email,
+          admin,
+        };
+        return res.status(200).json({ status: 200, message: 'Logged in successfully', data });
+      }
+      return res.status(405).json({ status: 405, error: message });
     } catch (error) {
       return next(error);
     }
