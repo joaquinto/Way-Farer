@@ -19,7 +19,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(validator());
 
-app.get('/', (_req, res, next) => {
+app.get('/', (req, res, next) => {
   res.status(200).json({ status: 200, message: 'Welcome to WayFarer ...' });
 });
 

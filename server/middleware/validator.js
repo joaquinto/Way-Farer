@@ -32,4 +32,28 @@ export default class validator {
       .then(next)
       .catch(errors => res.status(400).json({ status: 400, error: errors.map(err => err.msg) }));
   }
+
+  static signInValidation(req, res, next) {
+    req.checkBody('email').not().isEmpty().withMessage('Email is required.')
+      .isEmail()
+      .withMessage('Email must be valid.')
+      .isLength({ min: 5 })
+      .withMessage('Email should have more than 5 characters.')
+      .isLength({ max: 50 })
+      .withMessage('Email should not have more than 50 characters.')
+      .normalizeEmail()
+      .trim();
+    req.checkBody('password').not().isEmpty().withMessage('Password is required.')
+      .isLength({ min: 6 })
+      .withMessage('Password length must not be less than 6 characters.')
+      .matches('[0-9]')
+      .withMessage('Password must contain at least a number.')
+      .matches('[a-z]')
+      .withMessage('Password must contain at least a lowercase letter.')
+      .matches('[A-Z]')
+      .withMessage('Password must contain at least an uppercase letter.');
+    req.asyncValidationErrors()
+      .then(next)
+      .catch(errors => res.status(400).json({ status: 400, error: errors.map(err => err.msg) }));
+  }
 }
