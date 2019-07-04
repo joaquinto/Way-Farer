@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 export default class validator {
   static signUpValidation(req, res, next) {
     req.checkBody('firstname').not().isEmpty().withMessage('Firstname is required.')
@@ -30,7 +31,10 @@ export default class validator {
       .withMessage('Password must contain at least an uppercase letter.');
     req.asyncValidationErrors()
       .then(next)
-      .catch(errors => res.status(400).json({ status: 400, error: errors.map(err => err.msg) }));
+      .catch(errors => res.status(400).json({
+        status: 'error',
+        error: errors.map(err => err.msg),
+      }));
   }
 
   static signInValidation(req, res, next) {
@@ -52,8 +56,48 @@ export default class validator {
       .withMessage('Password must contain at least a lowercase letter.')
       .matches('[A-Z]')
       .withMessage('Password must contain at least an uppercase letter.');
+    return req.asyncValidationErrors()
+      .then(next)
+      .catch(errors => res.status(400).json({
+        status: 'error',
+        error: errors.map(err => err.msg),
+      }));
+  }
+
+  static tripValidation(req, res, next) {
+    req.checkBody('bus_id').not().isEmpty().withMessage('Bus id is required')
+      .isInt()
+      .withMessage('Bus id must be an integer.')
+      .isInt({ gt: 0 })
+      .withMessage('Bus id are possitive integers.');
+    req.checkBody('origin').not().isEmpty().withMessage('Origin is required.')
+      .isLength({ min: 1 })
+      .withMessage('Origin should have more than one character.')
+      .not()
+      .isAlpha()
+      .withMessage('Origin must be alphabets.');
+    req.checkBody('destination').not().isEmpty().withMessage('Destination is required.')
+      .isLength({ min: 1 })
+      .withMessage('Destination should have more than one character.')
+      .isAlpha()
+      .withMessage('Destination must be alphabets.');
+    req.checkBody('trip_date').not().isEmpty().withMessage('Trip date is required.')
+      .isLength({ min: 10 })
+      .withMessage('Trip date should have 10 characters.')
+      .isISO8601()
+      .withMessage('Trip date is not a valid date, input date in the format yyyy-mm-dd.');
+    req.checkBody('fare').not().isEmpty().withMessage('Fare is required.')
+      .isInt()
+      .withMessage('Fare should be an integer.')
+      .isInt({ gt: 15 })
+      .withMessage('Fare should be greater than 15.')
+      .isInt({ lt: 50000 })
+      .withMessage('Fare should be less than 50,000.');
     req.asyncValidationErrors()
       .then(next)
-      .catch(errors => res.status(400).json({ status: 400, error: errors.map(err => err.msg) }));
+      .catch(errors => res.status(400).json({
+        status: 'error',
+        error: errors.map(err => err.msg),
+      }));
   }
 }

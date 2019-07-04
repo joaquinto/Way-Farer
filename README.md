@@ -1,2 +1,2 @@
 # Way-Farer  [![Build Status](https://travis-ci.org/joaquinto/Way-Farer.svg?branch=develop)](https://travis-ci.org/joaquinto/Way-Farer)  [![Maintainability](https://api.codeclimate.com/v1/badges/78445729bfe0eb071b2d/maintainability)](https://codeclimate.com/github/joaquinto/Way-Farer/maintainability)  [![Test Coverage](https://api.codeclimate.com/v1/badges/78445729bfe0eb071b2d/test_coverage)](https://codeclimate.com/github/joaquinto/Way-Farer/test_coverage)  [![Coverage Status](https://coveralls.io/repos/github/joaquinto/Way-Farer/badge.svg?branch=develop)](https://coveralls.io/github/joaquinto/Way-Farer?branch=develop)
-WayFarer is a public bus transportation booking server.
+Way-Farer is a public bus transportation booking server.

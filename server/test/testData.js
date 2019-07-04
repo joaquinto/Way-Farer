@@ -82,8 +82,8 @@ const data = {
     password: 'Drake20195',
   },
   client: {
-    email: 'johngabriel@gmail.com',
-    password: 'john2019',
+    email: 'jacklangley@gmail.com',
+    password: 'Jack2019',
   },
   missingEmail: {
     password: 'Drake2019',
@@ -118,6 +118,78 @@ const data = {
   ldInvalidPassword: {
     email: 'drakelawson@gmail.com',
     password: 'Dr29',
+  },
+  missingBusId: {
+    origin: 'Port Harcourt',
+    destination: 'Lagos',
+    trip_date: '2019-10-06',
+    fare: 5000,
+  },
+  emptyBusId: {
+    bus_id: '',
+    origin: 'Port Harcourt',
+    destination: 'Lagos',
+    trip_date: '2019-10-06',
+    fare: 5000,
+  },
+  missingOrigin: {
+    bus_id: 1,
+    destination: 'Lagos',
+    trip_date: '2019-10-06',
+    fare: 5000,
+  },
+  emptyOrigin: {
+    bus_id: 1,
+    origin: '',
+    destination: 'Lagos',
+    trip_date: '2019-10-06',
+    fare: 5000,
+  },
+  missingDestination: {
+    bus_id: 1,
+    origin: 'Port Harcourt',
+    trip_date: '2019-10-06',
+    fare: 5000,
+  },
+  emptyDestination: {
+    bus_id: 1,
+    origin: 'Port Harcourt',
+    destination: '',
+    trip_date: '2019-10-06',
+    fare: 5000,
+  },
+  missingTripDate: {
+    bus_id: 1,
+    origin: 'Port Harcourt',
+    destination: 'Lagos',
+    fare: 5000,
+  },
+  emptyTripDate: {
+    bus_id: 1,
+    origin: 'Port Harcourt',
+    destination: 'Lagos',
+    trip_date: '',
+    fare: 5000,
+  },
+  missingFare: {
+    bus_id: 1,
+    origin: 'Port Harcourt',
+    destination: 'Lagos',
+    trip_date: '2019-10-06',
+  },
+  emptyFare: {
+    bus_id: 1,
+    origin: 'Port Harcourt',
+    destination: 'Lagos',
+    trip_date: '2019-10-06',
+    fare: '',
+  },
+  createTrip: {
+    bus_id: 1,
+    origin: 'Port Harcourt',
+    destination: 'Lagos',
+    trip_date: '2019-10-06',
+    fare: 5000,
   },
 };
 

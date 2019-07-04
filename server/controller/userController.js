@@ -32,7 +32,7 @@ export default class UserController {
         email,
         admin,
       };
-      return res.status(201).json({ status: 201, message: 'User created successfully', data });
+      return res.status(201).json({ status: 'success', data });
     } catch (error) {
       return next(error);
     }
@@ -59,9 +59,9 @@ export default class UserController {
           email,
           admin,
         };
-        return res.status(200).json({ status: 200, message: 'Logged in successfully', data });
+        return res.status(200).json({ status: 'success', data });
       }
-      return res.status(405).json({ status: 405, error: message });
+      return res.status(405).json({ status: 'error', error: message });
     } catch (error) {
       return next(error);
     }

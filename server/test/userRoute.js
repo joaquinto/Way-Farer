@@ -15,7 +15,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.missingFirstname);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -23,7 +23,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.emptySignUpFirstname);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -31,7 +31,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.missingLastname);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -39,7 +39,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.emptySignUpLastname);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -47,7 +47,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.missingSignupEmail);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -55,7 +55,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.emptysignUpemail);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -63,7 +63,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.missingSignupPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -71,7 +71,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.emptySignUpPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -79,7 +79,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.uInvalidSignUpPassword1);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -87,7 +87,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.lInvalidSignUpPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -95,7 +95,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.dInvalidSignUpPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -103,7 +103,7 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.ldInvalidSignUpPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -111,23 +111,23 @@ describe('Sign Up', () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.signUp);
-    assert.equal((res.body.status), 201);
+    assert.equal((res.body.status), 'success');
     assert.property((res.body), 'status');
-    assert.property((res.body), 'message');
+    assert.property((res.body), 'data');
   });
 
   it('should return status 200', async () => {
     const res = await chai.request(app)
       .get('/');
-    assert.equal((res.body.status), 200);
-    assert.property((res.body), 'message');
-    assert.equal((res.body.message), 'Welcome to WayFarer ...');
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
+    assert.equal((res.body.data), 'Welcome to WayFarer ...');
   });
 
   it('should return status 404', async () => {
     const res = await chai.request(app)
       .get('/homy');
-    assert.equal((res.body.status), 404);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
     assert.equal((res.body.error), 'Page not found');
   });
@@ -143,7 +143,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.missingEmail);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -151,7 +151,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.emptyEmail);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -159,7 +159,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.missingPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -167,7 +167,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.emptyPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -175,7 +175,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.invalidEmail);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -183,7 +183,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.uInvalidPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -191,7 +191,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.lInvalidPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -199,7 +199,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.dInvalidPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -207,7 +207,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.ldInvalidPassword);
-    assert.equal((res.body.status), 400);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -215,7 +215,7 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.signInWithWrongPassword);
-    assert.equal((res.body.status), 405);
+    assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
 
@@ -223,8 +223,8 @@ describe('Signing In', () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.signIn);
-    assert.equal((res.body.status), 200);
+    assert.equal((res.body.status), 'success');
     assert.property((res.body), 'status');
-    assert.property((res.body), 'message');
+    assert.property((res.body), 'data');
   });
 });
