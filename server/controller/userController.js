@@ -2,10 +2,12 @@ import db from '../db/index';
 import user from '../model/users';
 import jwtTokenUtils from '../helpers/jwtTokenUtils';
 import passwordUtils from '../helpers/passwordUtils';
+import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
 const { createUser, findUserByEmail } = user;
 const { signToken } = jwtTokenUtils;
+const { destructureUserData } = objectUtils;
 
 export default class UserController {
   static async signUp(req, res, next) {
@@ -19,19 +21,7 @@ export default class UserController {
 
     try {
       const { rows } = await query(createUser, values);
-      const [{
-        id, firstname, lastname, email,
-        admin,
-      }] = rows;
-      const token = await signToken(id, email, admin);
-      const data = {
-        token,
-        id,
-        firstname,
-        lastname,
-        email,
-        admin,
-      };
+      const data = destructureUserData(rows, signToken);
       return res.status(201).json({ status: 'success', data });
     } catch (error) {
       return next(error);
@@ -39,29 +29,17 @@ export default class UserController {
   }
 
   static async signIn(req, res, next) {
-    const message = 'User password does not match';
     const userEmail = req.body.email.toLowerCase();
     const userPassword = req.body.password;
     try {
       const { rows } = await query(findUserByEmail, [userEmail]);
-      const [{
-        id, firstname, lastname, email, password,
-        admin,
-      }] = rows;
+      const [{ password }] = rows;
       const isMatch = await passwordUtils.comparePassword(userPassword, password);
       if (isMatch) {
-        const token = signToken(id, email, admin);
-        const data = {
-          token,
-          id,
-          firstname,
-          lastname,
-          email,
-          admin,
-        };
+        const data = destructureUserData(rows, signToken);
         return res.status(200).json({ status: 'success', data });
       }
-      return res.status(405).json({ status: 'error', error: message });
+      return res.status(405).json({ status: 'error', error: 'Incorrect password, input the correct password.' });
     } catch (error) {
       return next(error);
     }

@@ -73,14 +73,13 @@ export default class validator {
     req.checkBody('origin').not().isEmpty().withMessage('Origin is required.')
       .isLength({ min: 1 })
       .withMessage('Origin should have more than one character.')
-      .not()
-      .isAlpha()
-      .withMessage('Origin must be alphabets.');
+      .matches(/^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/)
+      .withMessage('Origin does not match.');
     req.checkBody('destination').not().isEmpty().withMessage('Destination is required.')
       .isLength({ min: 1 })
       .withMessage('Destination should have more than one character.')
-      .isAlpha()
-      .withMessage('Destination must be alphabets.');
+      .matches(/^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/)
+      .withMessage('Destination does not match.');
     req.checkBody('trip_date').not().isEmpty().withMessage('Trip date is required.')
       .isLength({ min: 10 })
       .withMessage('Trip date should have 10 characters.')
