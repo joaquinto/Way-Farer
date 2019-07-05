@@ -116,9 +116,61 @@ describe('Create Trip', () => {
     assert.property((res.body), 'error');
   });
 
+  it('Should return an error for empty trip', async () => {
+    const res = await request
+      .get('/api/v1/trips')
+      .set('Authorization', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
   it('Should return the trip object', async () => {
     const res = await request
       .post('/api/v1/trips')
+      .set('Authorization', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'status');
+    assert.property((res.body), 'data');
+  });
+});
+
+describe('Get Trip', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.client);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(() => {
+    request = chai.request(app);
+  });
+
+  it('Should return an error for invalid token', async () => {
+    const res = await request
+      .get('/api/v1/trips')
+      .set('Authorization', 'jhdkdjkhyfifkhjdjhkdhkdh')
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return an error for empty token', async () => {
+    const res = await request
+      .get('/api/v1/trips')
+      .set('Authorization', '')
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return the trip array of object', async () => {
+    const res = await request
+      .get('/api/v1/trips')
       .set('Authorization', userToken)
       .send(data.createTrip);
     assert.equal((res.body.status), 'success');

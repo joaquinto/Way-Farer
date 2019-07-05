@@ -21,8 +21,8 @@ const createTable = {
     origin TEXT NOT NULL,
     destination TEXT NOT NULL,
     fare NUMERIC(15, 2) NOT NULL,
-    trip_date TIMESTAMP NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT false,
+    trip_date VARCHAR(10) NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT true,
     FOREIGN KEY (bus_id) REFERENCES bus (id)
   )`,
 };
