@@ -25,12 +25,23 @@ const createTable = {
     active BOOLEAN NOT NULL DEFAULT true,
     FOREIGN KEY (bus_id) REFERENCES bus (id)
   )`,
+  bookingTable: `CREATE TABLE IF NOT EXISTS booking(
+    id SERIAL,
+    trip_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    seat_no INTEGER[] NOT NULL,
+    created_on TIMESTAMP NOT NULL,
+    PRIMARY KEY (user_id, trip_id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (trip_id) REFERENCES trip (id)
+  )`,
 };
 
 const dropTable = {
   dropUserTable: 'DROP TABLE IF EXISTS users CASCADE',
   dropBusTable: 'DROP TABLE IF EXISTS bus CASCADE',
   dropTripTable: 'DROP TABLE IF EXISTS trip CASCADE',
+  dropBookingTable: 'DROP TABLE IF EXISTS booking CASCADE',
 };
 
 const hashedPassword = '$2a$10$zig2e9fhVQkMTeedn.efUeIi8QkQ/p9HMcojoJTCfpUyuStP60fqe';
@@ -47,6 +58,11 @@ const seedData = {
     VALUES('SMK-123ZE', 'Toyota', 'Hiace', '2010', 15),
     ('SMK-567BN', 'Toyota', 'Hiace', '2010', 15),
     ('GGE-945GE', 'Toyota', 'Hiace', '2010', 15)`,
+
+  tripTable: `INSERT INTO
+  trip(bus_id, origin, destination, fare, trip_date)
+    VALUES(1, 'Texas', 'New York', '15000.00', '2019-10-06'),
+    (2, 'Abuja', 'Lagos', '10000.00', '2019-10-06')`,
 };
 
 export {

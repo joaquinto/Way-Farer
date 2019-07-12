@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import validator from 'express-validator';
 import users from './router/userRouter';
 import trips from './router/tripRouter';
+import bookings from './router/bookingRouter';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/', users);
 app.use('/api/v1/', trips);
+app.use('/api/v1/', bookings);
 
 app.use('*', (req, res, next) => {
   res.status(404).json({ status: 'error', error: 'Page not found' });
