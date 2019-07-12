@@ -1,10 +1,14 @@
 import db from '../db/index';
 import users from '../model/users';
 import bus from '../model/bus';
+import booking from '../model/booking';
+import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
 const { findUserByEmail } = users;
 const { findBusById } = bus;
+const { getSeatNumbers, checkForUser } = booking;
+const { convertSeatObjectToArray, filterItem } = objectUtils;
 
 export default class Authentication {
   static async isUserExist(req, res, next) {
@@ -41,6 +45,13 @@ export default class Authentication {
     return next();
   }
 
+  static async isUser(req, res, next) {
+    if (req.decoded.admin) {
+      return res.status(401).json({ status: 'error', error: 'Unauthorized access' });
+    }
+    return next();
+  }
+
   static async isBusExist(req, res, next) {
     const { bus_id: busId } = req.body;
     try {
@@ -51,6 +62,38 @@ export default class Authentication {
       return next();
     } catch (error) {
       return next(error);
+    }
+  }
+
+  static async hasUserBooked(req, res, next) {
+    try {
+      const { rows } = await query(checkForUser, [req.decoded.id]);
+      if (rows.length > 0) {
+        return res.status(409).json({
+          status: 'error',
+          error: 'You have already booked for this trip. If you want to book another seat for this trip, Kindly cancel your previous booking and select multiple seat number from the available seats for this trip.',
+        });
+      }
+      return next();
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async isSeatNumberExist(req, res, next) {
+    const { seat_number: seatNumber } = req.body;
+    try {
+      const { rows } = await query(getSeatNumbers);
+      if (rows.length > 0) {
+        const result = convertSeatObjectToArray(rows);
+        const seatNum = filterItem(result, seatNumber.split(','));
+        if (seatNum.length > 0) {
+          return res.status(409).json({ status: 'error', error: seatNum });
+        }
+      }
+      return next();
+    } catch (error) {
+      return next();
     }
   }
 }

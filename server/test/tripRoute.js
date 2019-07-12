@@ -116,15 +116,6 @@ describe('Create Trip', () => {
     assert.property((res.body), 'error');
   });
 
-  it('Should return an error for empty trip', async () => {
-    const res = await request
-      .get('/api/v1/trips')
-      .set('Authorization', userToken)
-      .send(data.createTrip);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
   it('Should return the trip object', async () => {
     const res = await request
       .post('/api/v1/trips')

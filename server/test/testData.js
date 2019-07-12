@@ -77,6 +77,10 @@ const data = {
     email: 'drakelawson@gmail.com',
     password: 'Drake2019',
   },
+  specialSignIn: {
+    email: 'johngabriel@gmail.com',
+    password: 'Jack2019',
+  },
   signInWithWrongPassword: {
     email: 'drakelawson@gmail.com',
     password: 'Drake20195',
@@ -190,6 +194,44 @@ const data = {
     destination: 'Lagos',
     trip_date: '2019-10-06',
     fare: 5000,
+  },
+  missingTripId: {
+    seat_number: 5,
+  },
+  missingSeatNumber: {
+    trip_id: 1,
+  },
+  emptyTripId: {
+    trip_id: '',
+    seat_number: 5,
+  },
+  emptySeatNumber: {
+    trip_id: 1,
+    seat_number: '',
+  },
+  invalidSeatNumber: {
+    trip_id: 1,
+    seat_number: 'gfjrk',
+  },
+  invalidTipId: {
+    trip_id: 'hbfjrf',
+    seat_number: 5,
+  },
+  highSeatNumber: {
+    trip_id: 1,
+    seat_number: 30,
+  },
+  booking: {
+    trip_id: 1,
+    seat_number: 5,
+  },
+  duplicateBooking: {
+    trip_id: 1,
+    seat_number: 5,
+  },
+  sameUserBooking: {
+    trip_id: 1,
+    seat_number: 7,
   },
 };
 
