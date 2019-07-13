@@ -2,7 +2,9 @@ import db from '../db/index';
 import booking from '../model/booking';
 
 const { query } = db;
-const { createBooking, getUserBooking, getCurrentBooking } = booking;
+const {
+  createBooking, getUserBooking, getCurrentBooking, getAllBookings,
+} = booking;
 
 export default class BookingController {
   static async createBooking(req, res, next) {
@@ -26,6 +28,10 @@ export default class BookingController {
 
   static async viewBookings(req, res, next) {
     try {
+      if (req.decoded.admin) {
+        const { rows } = await query(getAllBookings);
+        return res.status(200).json({ status: 'success', data: rows });
+      }
       const { rows } = await query(getUserBooking, [req.decoded.id]);
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'No data Found' });

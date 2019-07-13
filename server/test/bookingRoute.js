@@ -152,3 +152,26 @@ describe('View Booking misc', () => {
     assert.property((res.body), 'data');
   });
 });
+
+describe('View all Booking', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.client);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(async () => {
+    request = await chai.request(app);
+  });
+
+  it('should return an array of object for the user bookings', async () => {
+    const res = await request
+      .get('/api/v1/bookings')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
+  });
+});
