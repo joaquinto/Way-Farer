@@ -7,7 +7,7 @@ import objectUtils from '../helpers/objectUtils';
 const { query } = db;
 const { findUserByEmail } = users;
 const { findBusById } = bus;
-const { getSeatNumbers, checkForUser } = booking;
+const { getSeatNumbers, checkForUser, getBooking } = booking;
 const { convertSeatObjectToArray, filterItem } = objectUtils;
 
 export default class Authentication {
@@ -94,6 +94,22 @@ export default class Authentication {
       return next();
     } catch (error) {
       return next();
+    }
+  }
+
+  static async isOwner(req, res, next) {
+    try {
+      const { rows } = await query(getBooking, [req.params.id]);
+      if (rows.length < 1) {
+        return res.status(404).json({ status: 'error', error: 'No data Found' });
+      }
+      const [{ user_id: userId }] = rows;
+      if (req.decoded.id !== userId) {
+        return res.status(401).json({ status: 'error', error: 'Unauthorized access' });
+      }
+      return next();
+    } catch (error) {
+      return next(error);
     }
   }
 }

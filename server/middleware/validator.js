@@ -118,4 +118,18 @@ export default class validator {
         error: errors.map(err => err.msg),
       }));
   }
+
+  static bookingIdParams(req, res, next) {
+    req.checkParams('id').not().isEmpty().withMessage('Booking ID is required.')
+      .isInt()
+      .withMessage('Booking ID should be an integer.')
+      .isInt({ gt: 0 })
+      .withMessage('Booking ID should be greater than 0.');
+    req.asyncValidationErrors()
+      .then(next)
+      .catch(errors => res.status(400).json({
+        status: 'error',
+        error: errors.map(err => err.msg),
+      }));
+  }
 }
