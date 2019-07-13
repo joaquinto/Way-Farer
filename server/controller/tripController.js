@@ -3,7 +3,7 @@ import trip from '../model/trips';
 import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
-const { createTrip, getAllTrips } = trip;
+const { createTrip, getAllTrips, cancelTrip } = trip;
 const { changeTripKey, destructureTripData } = objectUtils;
 
 export default class TripController {
@@ -31,6 +31,15 @@ export default class TripController {
         return res.status(404).json({ status: 'error', error: 'Trips not found' });
       }
       return res.status(200).json({ status: 'success', data: changeTripKey(rows) });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async cancelTrip(req, res, next) {
+    try {
+      await query(cancelTrip, [false, req.params.id]);
+      return res.status(200).json({ status: 'success', data: { message: 'Trip cancelled successfully' } });
     } catch (error) {
       return next(error);
     }

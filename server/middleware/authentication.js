@@ -2,11 +2,13 @@ import db from '../db/index';
 import users from '../model/users';
 import bus from '../model/bus';
 import booking from '../model/booking';
+import trip from '../model/trips';
 import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
 const { findUserByEmail } = users;
 const { findBusById } = bus;
+const { getTrip } = trip;
 const { getSeatNumbers, checkForUser, getBooking } = booking;
 const { convertSeatObjectToArray, filterItem } = objectUtils;
 
@@ -57,7 +59,7 @@ export default class Authentication {
     try {
       const { rows } = await query(findBusById, [busId]);
       if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'Bus not found' });
+        return res.status(404).json({ status: 'error', error: 'Bus not Found' });
       }
       return next();
     } catch (error) {
@@ -101,11 +103,23 @@ export default class Authentication {
     try {
       const { rows } = await query(getBooking, [req.params.id]);
       if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'No data Found' });
+        return res.status(404).json({ status: 'error', error: 'Booking not Found' });
       }
       const [{ user_id: userId }] = rows;
       if (req.decoded.id !== userId) {
         return res.status(401).json({ status: 'error', error: 'Unauthorized access' });
+      }
+      return next();
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async isTripExist(req, res, next) {
+    try {
+      const { rows } = await query(getTrip, [req.params.id]);
+      if (rows.length < 1) {
+        return res.status(404).json({ status: 'error', error: 'Trip not Found' });
       }
       return next();
     } catch (error) {

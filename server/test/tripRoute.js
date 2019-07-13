@@ -169,3 +169,73 @@ describe('Get Trip', () => {
     assert.property((res.body), 'data');
   });
 });
+
+describe('Cancel Trip', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.client);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(async () => {
+    request = await chai.request(app);
+  });
+
+  it('should throw an error for usage of string', async () => {
+    const res = await request
+      .patch('/api/v1/trips/hfjfj')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for no data found', async () => {
+    const res = await request
+      .patch('/api/v1/trips/12')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for less than 1', async () => {
+    const res = await request
+      .patch('/api/v1/trips/0')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('should return success', async () => {
+    const res = await request
+      .patch('/api/v1/trips/3')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
+  });
+});
+
+describe('Cancel Trip Contn 1', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.bookingSignIn);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(async () => {
+    request = await chai.request(app);
+  });
+
+  it('should return error for not authorized', async () => {
+    const res = await request
+      .patch('/api/v1/trips/1')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+});

@@ -132,4 +132,18 @@ export default class validator {
         error: errors.map(err => err.msg),
       }));
   }
+
+  static tripIdParams(req, res, next) {
+    req.checkParams('id').not().isEmpty().withMessage('Trip ID is required.')
+      .isInt()
+      .withMessage('Trip ID should be an integer.')
+      .isInt({ gt: 0 })
+      .withMessage('Trip ID should be greater than 0.');
+    req.asyncValidationErrors()
+      .then(next)
+      .catch(errors => res.status(400).json({
+        status: 'error',
+        error: errors.map(err => err.msg),
+      }));
+  }
 }
