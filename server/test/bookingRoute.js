@@ -175,3 +175,96 @@ describe('View all Booking', () => {
     assert.property((res.body), 'data');
   });
 });
+
+describe('Delete Booking', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.client);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(async () => {
+    request = await chai.request(app);
+  });
+
+  it('should throw an error for usage of string', async () => {
+    const res = await request
+      .delete('/api/v1/bookings/hfjfj')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for no data found', async () => {
+    const res = await request
+      .delete('/api/v1/bookings/12')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for less than 1', async () => {
+    const res = await request
+      .delete('/api/v1/bookings/0')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('should throw an error for not a user', async () => {
+    const res = await request
+      .delete('/api/v1/bookings/1')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+});
+
+describe('Delete Booking Contn', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.specialSignIn);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(async () => {
+    request = await chai.request(app);
+  });
+
+  it('should return success', async () => {
+    const res = await request
+      .delete('/api/v1/bookings/1')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
+  });
+});
+
+describe('Delete Booking Contn 1', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.bookingSignIn);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(async () => {
+    request = await chai.request(app);
+  });
+
+  it('should return error for not authorized', async () => {
+    const res = await request
+      .delete('/api/v1/bookings/1')
+      .set('Authorization', userToken);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+});

@@ -3,7 +3,7 @@ import booking from '../model/booking';
 
 const { query } = db;
 const {
-  createBooking, getUserBooking, getCurrentBooking, getAllBookings,
+  createBooking, getUserBooking, getCurrentBooking, getAllBookings, deleteBooking,
 } = booking;
 
 export default class BookingController {
@@ -37,6 +37,15 @@ export default class BookingController {
         return res.status(404).json({ status: 'error', error: 'No data Found' });
       }
       return res.status(200).json({ status: 'success', data: rows });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async deleteBooking(req, res, next) {
+    try {
+      await query(deleteBooking, [req.params.id]);
+      return res.status(200).json({ status: 'success', data: { message: 'Booking deleted successfully' } });
     } catch (error) {
       return next(error);
     }
