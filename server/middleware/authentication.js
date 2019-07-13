@@ -14,9 +14,9 @@ const { convertSeatObjectToArray, filterItem } = objectUtils;
 
 export default class Authentication {
   static async isUserExist(req, res, next) {
-    const { email } = req.body;
+    const userEmail = req.body.email;
     try {
-      const { rows } = await query(findUserByEmail, [email.toLowerCase()]);
+      const { rows } = await query(findUserByEmail, [userEmail]);
       if (rows.length > 0) {
         return res.status(409).json({ status: 'error', error: 'User already exist' });
       }
@@ -27,9 +27,9 @@ export default class Authentication {
   }
 
   static async notAUser(req, res, next) {
-    const { email } = req.body;
+    const userEmail = req.body.email;
     try {
-      const { rows } = await query(findUserByEmail, [email.toLowerCase()]);
+      const { rows } = await query(findUserByEmail, [userEmail]);
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'User Not Found' });
       }

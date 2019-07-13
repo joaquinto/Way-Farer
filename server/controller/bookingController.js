@@ -15,7 +15,7 @@ export default class BookingController {
     const values = [tripId, req.decoded.id, seatData, createdOn];
     try {
       const { rows } = await query(createBooking, values);
-      const [{ booking_id: id }] = rows;
+      const [{ id }] = rows;
       if (rows.length > 0) {
         const { rows: result } = await query(getCurrentBooking, [id]);
         return res.status(201).json({ status: 'success', data: result });

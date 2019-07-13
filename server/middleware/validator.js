@@ -1,16 +1,16 @@
 /* eslint-disable no-useless-escape */
 export default class validator {
   static signUpValidation(req, res, next) {
-    req.checkBody('first_name').not().isEmpty().withMessage('Firstname is required.')
+    req.checkBody('firstname').not().isEmpty().withMessage('Firstname is required.')
       .isLength({ min: 1 })
       .withMessage('Firstname should have more than one character.')
       .isAlpha()
       .withMessage('Firstname must be alphabets.');
-    req.checkBody('last_name').not().isEmpty().withMessage('Lastname is required.')
+    req.checkBody('lastname').not().isEmpty().withMessage('Lastname is required.')
       .isLength({ min: 1 })
       .withMessage('Lastname should have more than one character.')
       .isString()
-      .withMessage('Lastname must be string.');
+      .withMessage('Firstname must be string.');
     req.checkBody('email').not().isEmpty().withMessage('Email is required.')
       .isEmail()
       .withMessage('Email must be a valid email.')
