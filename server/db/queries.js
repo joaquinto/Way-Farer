@@ -63,6 +63,10 @@ const seedData = {
   trip(bus_id, origin, destination, fare, trip_date)
     VALUES(1, 'Texas', 'New York', '15000.00', '2019-10-06'),
     (2, 'Abuja', 'Lagos', '10000.00', '2019-10-06')`,
+
+  bookingTable: `INSERT INTO
+    booking(trip_id, user_id, seat_no, created_on)
+      VALUES(1, '2', '{6}', '2019-10-09')`,
 };
 
 export {

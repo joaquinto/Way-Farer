@@ -8,8 +8,10 @@ const router = express.Router();
 const { verifyToken } = jwtUtils;
 const { isUser, isSeatNumberExist, hasUserBooked } = authentication;
 const { bookingValidator } = validator;
-const { createBooking } = bookingController;
+const { createBooking, viewBookings } = bookingController;
 
 router.post('/bookings', bookingValidator, isSeatNumberExist, verifyToken, isUser, hasUserBooked, createBooking);
+
+router.get('/bookings', verifyToken, viewBookings);
 
 export default router;

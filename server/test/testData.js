@@ -233,6 +233,10 @@ const data = {
     trip_id: 1,
     seat_number: 7,
   },
+  bookingSignIn: {
+    email: 'johnsnow@gmail.com',
+    password: 'Jack2019',
+  },
 };
 
 export default data;
