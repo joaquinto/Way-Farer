@@ -16,7 +16,18 @@ export default class TripController {
 
     try {
       const { rows } = await query(createTrip, values);
-      return res.status(201).json({ status: 'success', data: rows });
+      const {
+        id, bus_id, origin, destination, trip_date, fare,
+      } = rows;
+      const data = {
+        id,
+        bus_id,
+        origin,
+        destination,
+        trip_date,
+        fare,
+      };
+      return res.status(201).json({ status: 'success', data });
     } catch (error) {
       return next(error);
     }
