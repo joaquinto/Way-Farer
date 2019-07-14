@@ -16,9 +16,9 @@ export default class TripController {
 
     try {
       const { rows } = await query(createTrip, values);
-      const {
+      const [{
         id, bus_id, origin, destination, trip_date, fare,
-      } = rows;
+      }] = rows;
       const data = {
         id,
         bus_id,
