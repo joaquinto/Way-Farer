@@ -16,7 +16,7 @@ const createTable = {
     capacity INTEGER NOT NULL
   )`,
   tripTable: `CREATE TABLE IF NOT EXISTS trip(
-    trip_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     bus_id INTEGER NOT NULL,
     origin TEXT NOT NULL,
     destination TEXT NOT NULL,
@@ -26,14 +26,14 @@ const createTable = {
     FOREIGN KEY (bus_id) REFERENCES bus (bus_id)
   )`,
   bookingTable: `CREATE TABLE IF NOT EXISTS booking(
-    booking_id SERIAL,
+    id SERIAL,
     trip_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     seat_number INTEGER[] NOT NULL,
     created_on TIMESTAMP NOT NULL,
     PRIMARY KEY (user_id, trip_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id),
-    FOREIGN KEY (trip_id) REFERENCES trip (trip_id)
+    FOREIGN KEY (trip_id) REFERENCES trip (id)
   )`,
 };
 
