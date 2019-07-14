@@ -1,10 +1,9 @@
+/* eslint-disable camelcase */
 import db from '../db/index';
 import trip from '../model/trips';
-import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
 const { createTrip, getAllTrips, cancelTrip } = trip;
-const { changeTripKey, destructureTripData } = objectUtils;
 
 export default class TripController {
   static async createTrip(req, res, next) {
@@ -17,8 +16,7 @@ export default class TripController {
 
     try {
       const { rows } = await query(createTrip, values);
-      const data = destructureTripData(rows);
-      return res.status(201).json({ status: 'success', data });
+      return res.status(201).json({ status: 'success', data: rows });
     } catch (error) {
       return next(error);
     }
@@ -30,7 +28,7 @@ export default class TripController {
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'Trips not found' });
       }
-      return res.status(200).json({ status: 'success', data: changeTripKey(rows) });
+      return res.status(200).json({ status: 'success', data: rows });
     } catch (error) {
       return next(error);
     }

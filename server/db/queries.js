@@ -1,14 +1,14 @@
 const createTable = {
   userTable: `CREATE TABLE IF NOT EXISTS users(
-    id SERIAL PRIMARY KEY,
-    firstname VARCHAR(35) NOT NULL,
-    lastname VARCHAR(35) NOT NULL,
+    user_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(35) NOT NULL,
+    last_name VARCHAR(35) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    admin BOOLEAN NOT NULL DEFAULT false
+    is_admin BOOLEAN NOT NULL DEFAULT false
   )`,
   busTable: `CREATE TABLE IF NOT EXISTS bus(
-    id SERIAL PRIMARY KEY,
+    bus_id SERIAL PRIMARY KEY,
     number_plate VARCHAR(9) NOT NULL,
     manufacturer VARCHAR(35) NOT NULL,
     model VARCHAR(35) NOT NULL,
@@ -16,24 +16,24 @@ const createTable = {
     capacity INTEGER NOT NULL
   )`,
   tripTable: `CREATE TABLE IF NOT EXISTS trip(
-    id SERIAL PRIMARY KEY,
+    trip_id SERIAL PRIMARY KEY,
     bus_id INTEGER NOT NULL,
     origin TEXT NOT NULL,
     destination TEXT NOT NULL,
     fare NUMERIC(15, 2) NOT NULL,
     trip_date VARCHAR(10) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT true,
-    FOREIGN KEY (bus_id) REFERENCES bus (id)
+    FOREIGN KEY (bus_id) REFERENCES bus (bus_id)
   )`,
   bookingTable: `CREATE TABLE IF NOT EXISTS booking(
-    id SERIAL,
+    booking_id SERIAL,
     trip_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    seat_no INTEGER[] NOT NULL,
+    seat_number INTEGER[] NOT NULL,
     created_on TIMESTAMP NOT NULL,
     PRIMARY KEY (user_id, trip_id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (trip_id) REFERENCES trip (id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (trip_id) REFERENCES trip (trip_id)
   )`,
 };
 
@@ -48,7 +48,7 @@ const hashedPassword = '$2a$10$zig2e9fhVQkMTeedn.efUeIi8QkQ/p9HMcojoJTCfpUyuStP6
 
 const seedData = {
   userTable: `INSERT INTO 
-  users(firstname, lastname, email, password, admin) 
+  users(first_name, last_name, email, password, is_admin) 
     VALUES('Jack', 'Langley', 'jacklangley@gmail.com', '${hashedPassword}', true),
     ('John', 'Gabriel', 'johngabriel@gmail.com', '${hashedPassword}', false),
     ('John', 'Snow', 'johnsnow@gmail.com','${hashedPassword}', false)`,
@@ -65,7 +65,7 @@ const seedData = {
     (2, 'Abuja', 'Lagos', '10000.00', '2019-10-06')`,
 
   bookingTable: `INSERT INTO
-    booking(trip_id, user_id, seat_no, created_on)
+    booking(trip_id, user_id, seat_number, created_on)
       VALUES(1, '2', '{6}', '2019-10-09')`,
 };
 
