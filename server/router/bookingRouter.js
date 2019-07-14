@@ -7,15 +7,15 @@ import authentication from '../middleware/authentication';
 const router = express.Router();
 const { verifyToken } = jwtUtils;
 const {
-  isUser, isSeatNumberExist, hasUserBooked, isOwner,
+  isSeatNumberExist, hasUserBooked,
 } = authentication;
 const { bookingValidator, bookingIdParams } = validator;
 const { createBooking, viewBookings, deleteBooking } = bookingController;
 
-router.post('/bookings', bookingValidator, isSeatNumberExist, verifyToken, isUser, hasUserBooked, createBooking);
+router.post('/bookings', bookingValidator, isSeatNumberExist, verifyToken, hasUserBooked, createBooking);
 
 router.get('/bookings', verifyToken, viewBookings);
 
-router.delete('/bookings/:id', bookingIdParams, verifyToken, isUser, isOwner, deleteBooking);
+router.delete('/bookings/:id', bookingIdParams, verifyToken, deleteBooking);
 
 export default router;

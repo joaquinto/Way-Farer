@@ -8,13 +8,13 @@ const router = express.Router();
 
 const { createTrip, getAllTrips, cancelTrip } = tripController;
 const { verifyToken } = jwtUtils;
-const { isAdmin, isBusExist, isTripExist } = authentication;
+const { isBusExist, isTripExist } = authentication;
 const { tripValidation, tripIdParams } = validator;
 
-router.post('/trips', tripValidation, verifyToken, isAdmin, isBusExist, createTrip);
+router.post('/trips', tripValidation, verifyToken, isBusExist, createTrip);
 
 router.get('/trips', verifyToken, getAllTrips);
 
-router.patch('/trips/:id', tripIdParams, isTripExist, verifyToken, isAdmin, cancelTrip);
+router.patch('/trips/:id', tripIdParams, isTripExist, verifyToken, cancelTrip);
 
 export default router;
