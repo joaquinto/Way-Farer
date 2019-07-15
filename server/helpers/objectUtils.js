@@ -1,4 +1,6 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable array-callback-return */
+
 export default class ObjectUtils {
   static convertSeatObjectToArray(data) {
     const result = [];
@@ -24,5 +26,31 @@ export default class ObjectUtils {
       });
     });
     return messageList;
+  }
+
+  static randomArray(limit) {
+    const numberArray = [];
+    for (let i = 1; i < limit + 1; i++) {
+      numberArray.push(i);
+    }
+    return numberArray;
+  }
+
+  static generateSeatNumber(req) {
+    let seatNumber = '';
+    const numbers = ObjectUtils.randomArray(req.capacity);
+    const exclude = req.takenSeats;
+    exclude.push(1);
+    const filtered = [];
+
+    numbers.forEach((values) => {
+      if (exclude.indexOf(values) === -1) {
+        filtered.push(values);
+      }
+    });
+
+    const randomSeat = Math.floor(Math.random() * filtered.length);
+    seatNumber = filtered[randomSeat];
+    return seatNumber;
   }
 }

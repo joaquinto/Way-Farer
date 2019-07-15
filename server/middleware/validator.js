@@ -94,11 +94,6 @@ export default class validator {
       .withMessage('Trip ID should be an integer.')
       .isInt({ gt: 0 })
       .withMessage('Trip ID should be greater than 0.');
-    req.checkBody('seat_number').not().isEmpty().withMessage('Seat Number is required.')
-      .isLength({ min: 1 })
-      .withMessage('Seat Number should have more than one character.')
-      .matches(/\d+(?:,\d+)*/)
-      .withMessage('Seat Number does not match.');
     req.asyncValidationErrors()
       .then(next)
       .catch(errors => res.status(400).json({
