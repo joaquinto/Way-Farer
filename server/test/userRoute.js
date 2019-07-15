@@ -75,31 +75,7 @@ describe('Sign Up', () => {
     assert.property((res.body), 'error');
   });
 
-  it('should throw an error for missing uppercase password', async () => {
-    const res = await request
-      .post('/api/v1/auth/signup')
-      .send(data.uInvalidSignUpPassword1);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
-  it('should throw an error for missing lowercase password', async () => {
-    const res = await request
-      .post('/api/v1/auth/signup')
-      .send(data.lInvalidSignUpPassword);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
-  it('should throw an error for missing digit password', async () => {
-    const res = await request
-      .post('/api/v1/auth/signup')
-      .send(data.dInvalidSignUpPassword);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
-  it('should throw an error for less than 6 password length', async () => {
+  it('should throw an error for less than 2 password length', async () => {
     const res = await request
       .post('/api/v1/auth/signup')
       .send(data.ldInvalidSignUpPassword);
@@ -179,42 +155,10 @@ describe('Signing In', () => {
     assert.property((res.body), 'error');
   });
 
-  it('should throw an error for missing uppercase password', async () => {
-    const res = await request
-      .post('/api/v1/auth/signin')
-      .send(data.uInvalidPassword);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
-  it('should throw an error for missing lowercase password', async () => {
-    const res = await request
-      .post('/api/v1/auth/signin')
-      .send(data.lInvalidPassword);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
-  it('should throw an error for missing digit password', async () => {
-    const res = await request
-      .post('/api/v1/auth/signin')
-      .send(data.dInvalidPassword);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
-  it('should throw an error for less than 6 password length', async () => {
+  it('should throw an error for less than 2 password length', async () => {
     const res = await request
       .post('/api/v1/auth/signin')
       .send(data.ldInvalidPassword);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
-  });
-
-  it('should throw an error for wrong password', async () => {
-    const res = await request
-      .post('/api/v1/auth/signin')
-      .send(data.signInWithWrongPassword);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });

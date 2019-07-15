@@ -1,16 +1,16 @@
 /* eslint-disable no-useless-escape */
 export default class validator {
   static signUpValidation(req, res, next) {
-    req.checkBody('firstname').not().isEmpty().withMessage('Firstname is required.')
+    req.checkBody('first_name').not().isEmpty().withMessage('Firstname is required.')
       .isLength({ min: 1 })
       .withMessage('Firstname should have more than one character.')
       .isAlpha()
       .withMessage('Firstname must be alphabets.');
-    req.checkBody('lastname').not().isEmpty().withMessage('Lastname is required.')
+    req.checkBody('last_name').not().isEmpty().withMessage('Lastname is required.')
       .isLength({ min: 1 })
       .withMessage('Lastname should have more than one character.')
       .isString()
-      .withMessage('Firstname must be string.');
+      .withMessage('Lastname must be string.');
     req.checkBody('email').not().isEmpty().withMessage('Email is required.')
       .isEmail()
       .withMessage('Email must be a valid email.')
@@ -21,14 +21,8 @@ export default class validator {
       .normalizeEmail()
       .trim();
     req.checkBody('password').not().isEmpty().withMessage('Password is required.')
-      .isLength({ min: 6 })
-      .withMessage('Password length must not be less than 6 characters.')
-      .matches('[0-9]')
-      .withMessage('Password must contain at least a number.')
-      .matches('[a-z]')
-      .withMessage('Password must contain at least a lowercase letter.')
-      .matches('[A-Z]')
-      .withMessage('Password must contain at least an uppercase letter.');
+      .isLength({ min: 2 })
+      .withMessage('Password length must not be less than 2 characters.');
     req.asyncValidationErrors()
       .then(next)
       .catch(errors => res.status(400).json({
@@ -48,14 +42,8 @@ export default class validator {
       .normalizeEmail()
       .trim();
     req.checkBody('password').not().isEmpty().withMessage('Password is required.')
-      .isLength({ min: 6 })
-      .withMessage('Password length must not be less than 6 characters.')
-      .matches('[0-9]')
-      .withMessage('Password must contain at least a number.')
-      .matches('[a-z]')
-      .withMessage('Password must contain at least a lowercase letter.')
-      .matches('[A-Z]')
-      .withMessage('Password must contain at least an uppercase letter.');
+      .isLength({ min: 2 })
+      .withMessage('Password length must not be less than 2 characters.');
     return req.asyncValidationErrors()
       .then(next)
       .catch(errors => res.status(400).json({
@@ -106,11 +94,6 @@ export default class validator {
       .withMessage('Trip ID should be an integer.')
       .isInt({ gt: 0 })
       .withMessage('Trip ID should be greater than 0.');
-    req.checkBody('seat_number').not().isEmpty().withMessage('Seat Number is required.')
-      .isLength({ min: 1 })
-      .withMessage('Seat Number should have more than one character.')
-      .matches(/\d+(?:,\d+)*/)
-      .withMessage('Seat Number does not match.');
     req.asyncValidationErrors()
       .then(next)
       .catch(errors => res.status(400).json({

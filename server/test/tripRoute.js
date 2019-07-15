@@ -110,7 +110,7 @@ describe('Create Trip', () => {
   it('Should return an error for invalid token', async () => {
     const res = await request
       .post('/api/v1/trips')
-      .set('Authorization', 'jhdkdjkhyfifkhjdjhkdhkdh')
+      .set('Token', 'jhdkdjkhyfifkhjdjhkdhkdh')
       .send(data.createTrip);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -119,7 +119,7 @@ describe('Create Trip', () => {
   it('Should return the trip object', async () => {
     const res = await request
       .post('/api/v1/trips')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.createTrip);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'status');
@@ -144,7 +144,7 @@ describe('Get Trip', () => {
   it('Should return an error for invalid token', async () => {
     const res = await request
       .get('/api/v1/trips')
-      .set('Authorization', 'jhdkdjkhyfifkhjdjhkdhkdh')
+      .set('Token', 'jhdkdjkhyfifkhjdjhkdhkdh')
       .send(data.createTrip);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -153,7 +153,7 @@ describe('Get Trip', () => {
   it('Should return an error for empty token', async () => {
     const res = await request
       .get('/api/v1/trips')
-      .set('Authorization', '')
+      .set('Token', '')
       .send(data.createTrip);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -162,7 +162,7 @@ describe('Get Trip', () => {
   it('Should return the trip array of object', async () => {
     const res = await request
       .get('/api/v1/trips')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.createTrip);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'status');
@@ -187,7 +187,7 @@ describe('Cancel Trip', () => {
   it('should throw an error for usage of string', async () => {
     const res = await request
       .patch('/api/v1/trips/hfjfj')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -195,7 +195,7 @@ describe('Cancel Trip', () => {
   it('should throw an error for no data found', async () => {
     const res = await request
       .patch('/api/v1/trips/12')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -203,7 +203,7 @@ describe('Cancel Trip', () => {
   it('should throw an error for less than 1', async () => {
     const res = await request
       .patch('/api/v1/trips/0')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -211,7 +211,7 @@ describe('Cancel Trip', () => {
   it('should return success', async () => {
     const res = await request
       .patch('/api/v1/trips/3')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'data');
   });
@@ -234,7 +234,7 @@ describe('Cancel Trip Contn 1', () => {
   it('should return error for not authorized', async () => {
     const res = await request
       .patch('/api/v1/trips/1')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });

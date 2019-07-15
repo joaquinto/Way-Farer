@@ -7,16 +7,16 @@ import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
 const { findUserByEmail } = users;
-const { findBusById } = bus;
+const { findBusById, getBusCapacity } = bus;
 const { getTrip } = trip;
 const { getSeatNumbers, checkForUser, getBooking } = booking;
 const { convertSeatObjectToArray, filterItem } = objectUtils;
 
 export default class Authentication {
   static async isUserExist(req, res, next) {
-    const userEmail = req.body.email;
+    const { email } = req.body;
     try {
-      const { rows } = await query(findUserByEmail, [userEmail]);
+      const { rows } = await query(findUserByEmail, [email.toLowerCase()]);
       if (rows.length > 0) {
         return res.status(409).json({ status: 'error', error: 'User already exist' });
       }
@@ -27,9 +27,9 @@ export default class Authentication {
   }
 
   static async notAUser(req, res, next) {
-    const userEmail = req.body.email;
+    const { email } = req.body;
     try {
-      const { rows } = await query(findUserByEmail, [userEmail]);
+      const { rows } = await query(findUserByEmail, [email.toLowerCase()]);
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'User Not Found' });
       }
@@ -88,6 +88,7 @@ export default class Authentication {
       const { rows } = await query(getSeatNumbers);
       if (rows.length > 0) {
         const result = convertSeatObjectToArray(rows);
+        req.takenSeats = result;
         const seatNum = filterItem(result, seatNumber.split(','));
         if (seatNum.length > 0) {
           return res.status(409).json({ status: 'error', error: seatNum });
@@ -121,6 +122,17 @@ export default class Authentication {
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'Trip not Found' });
       }
+      return next();
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async getBusCapacity(req, res, next) {
+    try {
+      const { rows } = await query(getBusCapacity, [req.body.trip_id]);
+      const [{ capacity }] = rows;
+      req.capacity = capacity;
       return next();
     } catch (error) {
       return next(error);

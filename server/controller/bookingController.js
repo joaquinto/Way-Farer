@@ -1,26 +1,44 @@
 import db from '../db/index';
 import booking from '../model/booking';
+import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
+const { generateSeatNumber } = objectUtils;
 const {
   createBooking, getUserBooking, getCurrentBooking, getAllBookings, deleteBooking,
 } = booking;
 
 export default class BookingController {
   static async createBooking(req, res, next) {
-    const { seat_number: seatNo, trip_id: tripId } = req.body;
+    const seatData = [];
+    const { trip_id: tripId } = req.body;
     const createdOn = new Date();
-    const seatData = seatNo.split(',');
+    seatData.push(generateSeatNumber(req));
 
     const values = [tripId, req.decoded.id, seatData, createdOn];
     try {
       const { rows } = await query(createBooking, values);
-      const [{ id }] = rows;
+      const [{ id: newId }] = rows;
       if (rows.length > 0) {
-        const { rows: result } = await query(getCurrentBooking, [id]);
-        return res.status(201).json({ status: 'success', data: result });
+        const { rows: result } = await query(getCurrentBooking, [newId]);
+        const [{
+          // eslint-disable-next-line camelcase
+          id, trip_id, user_id, bus_id, trip_date, seat_number, first_name, last_name, email,
+        }] = result;
+        const data = {
+          id,
+          trip_id,
+          user_id,
+          bus_id,
+          trip_date,
+          seat_number,
+          first_name,
+          last_name,
+          email,
+        };
+        return res.status(201).json({ status: 'success', data });
       }
-      return res.status(404).json({ status: 'error', error: 'No data found' });
+      return res.status(404).json({ status: 'error', error: 'Booking data found' });
     } catch (error) {
       return next(error);
     }

@@ -9,11 +9,11 @@ export default class JwtToken {
 
   static verifyToken(req, res, next) {
     const key = process.env.SECRET_KEY;
-    const token = req.headers.authorization;
-    if (!token) {
+    const tokenHeaders = req.headers.token;
+    if (!tokenHeaders) {
       return res.status(403).json({ status: 'error', error: 'No token provided' });
     }
-    jwt.verify(token, key, (error, decoded) => {
+    jwt.verify(tokenHeaders, key, (error, decoded) => {
       if (error) {
         return res.status(401).json({ status: 'error', error: 'Invalid token provided' });
       }

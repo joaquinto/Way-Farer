@@ -23,7 +23,7 @@ describe('Create Booking', () => {
   it('should throw an error for missing trip id', async () => {
     const res = await request
       .post('/api/v1/bookings')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.missingTripId);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -32,7 +32,7 @@ describe('Create Booking', () => {
   it('should throw an error for missing seat number', async () => {
     const res = await request
       .post('/api/v1/bookings')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.missingSeatNumber);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -41,7 +41,7 @@ describe('Create Booking', () => {
   it('should throw an error for empty trip id', async () => {
     const res = await request
       .post('/api/v1/bookings')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.emptyTripId);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -50,7 +50,7 @@ describe('Create Booking', () => {
   it('should throw an error for empty seat number', async () => {
     const res = await request
       .post('/api/v1/bookings')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.emptySeatNumber);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -59,7 +59,7 @@ describe('Create Booking', () => {
   it('should throw an error for invalid trip id', async () => {
     const res = await request
       .post('/api/v1/bookings')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.invalidTipId);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -68,7 +68,7 @@ describe('Create Booking', () => {
   it('should throw an error for invalid seat number', async () => {
     const res = await request
       .post('/api/v1/bookings')
-      .set('Authorization', userToken)
+      .set('Token', userToken)
       .send(data.invalidSeatNumber);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -85,7 +85,7 @@ describe('Create Booking', () => {
   it('Should return an error for invalid token', async () => {
     const res = await request
       .post('/api/v1/bookings')
-      .set('Authorization', 'jhdkdjkhyfifkhjdjhkdhkdh')
+      .set('Token', 'jhdkdjkhyfifkhjdjhkdhkdh')
       .send(data.createTrip);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
@@ -116,7 +116,7 @@ describe('View Booking', () => {
   it('Should return an error for invalid token', async () => {
     const res = await request
       .get('/api/v1/bookings')
-      .set('Authorization', 'jhdkdjkhyfifkhjdjhkdhkdh');
+      .set('Token', 'jhdkdjkhyfifkhjdjhkdhkdh');
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -124,7 +124,7 @@ describe('View Booking', () => {
   it('should return an error for no data found', async () => {
     const res = await request
       .get('/api/v1/bookings')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -147,7 +147,7 @@ describe('View Booking misc', () => {
   it('should return an array of object for the user bookings', async () => {
     const res = await request
       .get('/api/v1/bookings')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'data');
   });
@@ -170,7 +170,7 @@ describe('View all Booking', () => {
   it('should return an array of object for the user bookings', async () => {
     const res = await request
       .get('/api/v1/bookings')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'data');
   });
@@ -193,7 +193,7 @@ describe('Delete Booking', () => {
   it('should throw an error for usage of string', async () => {
     const res = await request
       .delete('/api/v1/bookings/hfjfj')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -201,7 +201,7 @@ describe('Delete Booking', () => {
   it('should throw an error for no data found', async () => {
     const res = await request
       .delete('/api/v1/bookings/12')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -209,7 +209,7 @@ describe('Delete Booking', () => {
   it('should throw an error for less than 1', async () => {
     const res = await request
       .delete('/api/v1/bookings/0')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -217,7 +217,7 @@ describe('Delete Booking', () => {
   it('should throw an error for not a user', async () => {
     const res = await request
       .delete('/api/v1/bookings/1')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
@@ -240,7 +240,7 @@ describe('Delete Booking Contn', () => {
   it('should return success', async () => {
     const res = await request
       .delete('/api/v1/bookings/1')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'data');
   });
@@ -263,7 +263,7 @@ describe('Delete Booking Contn 1', () => {
   it('should return error for not authorized', async () => {
     const res = await request
       .delete('/api/v1/bookings/1')
-      .set('Authorization', userToken);
+      .set('Token', userToken);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
