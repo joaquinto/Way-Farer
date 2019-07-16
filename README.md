@@ -34,7 +34,7 @@ ___
 ___
 
 ## API Information
-The API endpoints are hosted on Heroku - [Quick Credit](https://quickycredit.herokuapp.com/)
+The API endpoints are hosted on Heroku - [WAY-FARER](https://way-farerapp.herokuapp.com/)
 
 |METHOD  |DESCRIPTION                        |ENDPOINT                                  |
 |------- |-----------------------------------|------------------------------------------|
