@@ -14,6 +14,24 @@ ___
 bookings.
 8. Users can delete their booking.
 9. Users can specify their seat numbers when making a booking.
+
+___
+
+## Prerequisites
+
+* You should have [Node.js](https://nodejs.org/en/) installed on your local machine.
+* You should have [Postgresql](https://www.postgresql.org/download/) installed on your local machine.
+* You should have [Git](https://git-scm.com/downloads) installed on your machine to clone the project
+* You also need to create a `.env` file in the project root folder.
+
+### Note
+After creating the `.env` file, add a secret key and postgresql database of your choosing.
+
+```
+PORT = 5000
+SECRET_KEY = XXXXXXXXXX
+DATABASE_URL = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
 ___
 
 
