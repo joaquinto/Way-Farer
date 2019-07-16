@@ -92,6 +92,30 @@ describe('Create Booking', () => {
   });
 });
 
+describe('Create Booking misc', () => {
+  let request;
+  let userToken;
+  before(async () => {
+    const res = await chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send(data.draftBookingSignIn);
+    userToken = res.body.data.token;
+  });
+
+  beforeEach(async () => {
+    request = await chai.request(app);
+  });
+
+  it('should return an array of object for the user bookings', async () => {
+    const res = await request
+      .post('/api/v1/bookings')
+      .set('Token', userToken)
+      .send(data.missingSeatNumber);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
+  });
+});
+
 describe('View Booking', () => {
   let request;
   let userToken;
@@ -129,6 +153,7 @@ describe('View Booking', () => {
     assert.property((res.body), 'error');
   });
 });
+
 
 describe('View Booking misc', () => {
   let request;
