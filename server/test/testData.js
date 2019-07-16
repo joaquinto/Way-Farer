@@ -237,6 +237,10 @@ const data = {
     email: 'johnsnow@gmail.com',
     password: 'Jack2019',
   },
+  draftBookingSignIn: {
+    email: 'philipjackson@gmail.com',
+    password: 'Jack2019',
+  },
 };
 
 export default data;

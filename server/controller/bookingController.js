@@ -10,10 +10,14 @@ const {
 
 export default class BookingController {
   static async createBooking(req, res, next) {
-    const seatData = [];
-    const { trip_id: tripId } = req.body;
+    let seatData = [];
+    const { seat_number: seatNumber, trip_id: tripId } = req.body;
     const createdOn = new Date();
-    seatData.push(generateSeatNumber(req));
+    if (typeof (seatNumber) !== 'undefined') {
+      seatData = seatNumber.split(',');
+    } else {
+      seatData.push(generateSeatNumber(req));
+    }
 
     const values = [tripId, req.decoded.id, seatData, createdOn];
     try {

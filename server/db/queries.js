@@ -51,7 +51,8 @@ const seedData = {
   users(first_name, last_name, email, password, is_admin) 
     VALUES('Jack', 'Langley', 'jacklangley@gmail.com', '${hashedPassword}', true),
     ('John', 'Gabriel', 'johngabriel@gmail.com', '${hashedPassword}', false),
-    ('John', 'Snow', 'johnsnow@gmail.com','${hashedPassword}', false)`,
+    ('John', 'Snow', 'johnsnow@gmail.com','${hashedPassword}', false),
+    ('Philip', 'Jackson', 'philipjackson@gmail.com','${hashedPassword}', false)`,
 
   busTable: `INSERT INTO 
   bus(number_plate, manufacturer, model, year, capacity)

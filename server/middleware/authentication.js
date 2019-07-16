@@ -83,17 +83,28 @@ export default class Authentication {
   }
 
   static async isSeatNumberExist(req, res, next) {
+    let takenSeat = [];
     const { seat_number: seatNumber } = req.body;
     try {
       const { rows } = await query(getSeatNumbers);
+      const { rows: newRows } = await query(getBusCapacity, [req.body.trip_id]);
+      const [{ capacity }] = newRows;
+      req.capacity = capacity;
       if (rows.length > 0) {
         const result = convertSeatObjectToArray(rows);
-        req.takenSeats = result;
+        if (result.length < capacity.length) {
+          return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
+        }
+        if (typeof (seatNumber) === 'undefined') {
+          takenSeat = result;
+          req.takenSeats = takenSeat;
+        }
         const seatNum = filterItem(result, seatNumber.split(','));
         if (seatNum.length > 0) {
           return res.status(409).json({ status: 'error', error: seatNum });
         }
       }
+      req.takenSeats = takenSeat;
       return next();
     } catch (error) {
       return next();
@@ -122,17 +133,6 @@ export default class Authentication {
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'Trip not Found' });
       }
-      return next();
-    } catch (error) {
-      return next(error);
-    }
-  }
-
-  static async getBusCapacity(req, res, next) {
-    try {
-      const { rows } = await query(getBusCapacity, [req.body.trip_id]);
-      const [{ capacity }] = rows;
-      req.capacity = capacity;
       return next();
     } catch (error) {
       return next(error);
