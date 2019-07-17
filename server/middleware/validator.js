@@ -134,4 +134,18 @@ export default class validator {
         error: errors.map(err => err.msg),
       }));
   }
+
+  static viewTrips(req, res, next) {
+    req.checkQuery('destination').optional()
+      .isLength({ min: 1 })
+      .withMessage('Destination should have more than one character.')
+      .matches(/^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/)
+      .withMessage('Destination does not match.');
+    req.asyncValidationErrors()
+      .then(next)
+      .catch(errors => res.status(400).json({
+        status: 'error',
+        error: errors.map(err => err.msg),
+      }));
+  }
 }

@@ -53,4 +53,15 @@ export default class ObjectUtils {
     seatNumber = filtered[randomSeat];
     return seatNumber;
   }
+
+  static convertStringToTitle(word) {
+    const sentence = word.split(' ');
+    const container = [];
+    let currentString = '';
+    sentence.map((values) => {
+      currentString = values.charAt(0).toUpperCase() + values.slice(1);
+      container.push(currentString);
+    });
+    return container.join(' ');
+  }
 }

@@ -9,11 +9,11 @@ const router = express.Router();
 const { createTrip, getAllTrips, cancelTrip } = tripController;
 const { verifyToken } = jwtUtils;
 const { isAdmin, isBusExist, isTripExist } = authentication;
-const { tripValidation, tripIdParams } = validator;
+const { tripValidation, tripIdParams, viewTrips } = validator;
 
 router.post('/trips', tripValidation, verifyToken, isAdmin, isBusExist, createTrip);
 
-router.get('/trips', verifyToken, getAllTrips);
+router.get('/trips', viewTrips, verifyToken, getAllTrips);
 
 router.patch('/trips/:id', tripIdParams, isTripExist, verifyToken, isAdmin, cancelTrip);
 

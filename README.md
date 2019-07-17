@@ -14,6 +14,7 @@ ___
 bookings.
 8. Users can delete their booking.
 9. Users can specify their seat numbers when making a booking.
+10. Users can get a list of filtered trips based on destination.
 
 ___
 
@@ -60,6 +61,7 @@ The API endpoints are hosted on Heroku - [WAY-FARER](https://way-farerapp.heroku
 |POST    |Sign In                            |/api/v1/auth/signin                        |
 |POST    |Create a trip           |/api/v1/trips                         |
 |GET   | Get all trips           | /api/v1/trips  |
+|GET   | Filter trips based on destination           | /api/v1/trips?destination={destination}  |
 |POST    | Book a seat on a trip        | /api/v1/bookings  |
 |GET    | View all bookings                | /api/v1/bookings   |
 |DELETE   | Delete a booking                    | /api/v1/bookings/:bookingId   |
