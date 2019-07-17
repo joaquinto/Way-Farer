@@ -141,6 +141,11 @@ export default class validator {
       .withMessage('Destination should have more than one character.')
       .matches(/^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/)
       .withMessage('Destination does not match.');
+    req.checkQuery('origin').optional()
+      .isLength({ min: 1 })
+      .withMessage('Origin should have more than one character.')
+      .matches(/^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/)
+      .withMessage('Origin does not match.');
     req.asyncValidationErrors()
       .then(next)
       .catch(errors => res.status(400).json({

@@ -7,6 +7,7 @@ const { query } = db;
 const { convertStringToTitle } = objectUtils;
 const {
   createTrip, getAllTrips, cancelTrip, filterTripsByDestination,
+  filterTripsByOrigin,
 } = trip;
 
 export default class TripController {
@@ -41,10 +42,17 @@ export default class TripController {
   }
 
   static async getAllTrips(req, res, next) {
-    const { destination } = req.query;
+    const { destination, origin } = req.query;
     try {
       if (typeof (destination) !== 'undefined') {
         const { rows } = await query(filterTripsByDestination, [convertStringToTitle(destination)]);
+        if (rows.length < 1) {
+          return res.status(404).json({ status: 'error', error: 'Trips not found' });
+        }
+        return res.status(200).json({ status: 'success', data: rows });
+      }
+      if (typeof (origin) !== 'undefined') {
+        const { rows } = await query(filterTripsByOrigin, [convertStringToTitle(origin)]);
         if (rows.length < 1) {
           return res.status(404).json({ status: 'error', error: 'Trips not found' });
         }

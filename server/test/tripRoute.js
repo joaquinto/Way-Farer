@@ -168,9 +168,64 @@ describe('Get Trip', () => {
     assert.property((res.body), 'error');
   });
 
+  it('Should return an error 404', async () => {
+    const res = await request
+      .get('/api/v1/trips?destination=netherland')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return an error small length', async () => {
+    const res = await request
+      .get('/api/v1/trips?destination=')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
   it('Should return the trip array of object based on the destination', async () => {
     const res = await request
       .get('/api/v1/trips?destination=new york')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'status');
+    assert.property((res.body), 'data');
+  });
+
+  it('Should return an error for unmatched origin', async () => {
+    const res = await request
+      .get('/api/v1/trips?origin=gtt123')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return an error 404', async () => {
+    const res = await request
+      .get('/api/v1/trips?origin=netherland')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return an error small length', async () => {
+    const res = await request
+      .get('/api/v1/trips?origin=')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return the trip array of object based on the destination', async () => {
+    const res = await request
+      .get('/api/v1/trips?origin=abuja')
       .set('Token', userToken)
       .send(data.createTrip);
     assert.equal((res.body.status), 'success');

@@ -6,6 +6,8 @@ const tripQueries = {
 
   filterTripsByDestination: 'SELECT id, bus_id, origin, destination, trip_date, fare FROM trip WHERE destination = $1',
 
+  filterTripsByOrigin: 'SELECT id, bus_id, origin, destination, trip_date, fare FROM trip WHERE origin = $1',
+
   cancelTrip: 'UPDATE trip SET active = $1 WHERE id = $2',
 
   getTrip: 'SELECT * FROM trip WHERE id = $1',
