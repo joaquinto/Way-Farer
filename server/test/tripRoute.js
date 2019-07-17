@@ -159,6 +159,25 @@ describe('Get Trip', () => {
     assert.property((res.body), 'error');
   });
 
+  it('Should return an error for unmatched destination', async () => {
+    const res = await request
+      .get('/api/v1/trips?destination=gtt123')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('Should return the trip array of object based on the destination', async () => {
+    const res = await request
+      .get('/api/v1/trips?destination=new york')
+      .set('Token', userToken)
+      .send(data.createTrip);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'status');
+    assert.property((res.body), 'data');
+  });
+
   it('Should return the trip array of object', async () => {
     const res = await request
       .get('/api/v1/trips')

@@ -1,9 +1,13 @@
 /* eslint-disable camelcase */
 import db from '../db/index';
 import trip from '../model/trips';
+import objectUtils from '../helpers/objectUtils';
 
 const { query } = db;
-const { createTrip, getAllTrips, cancelTrip } = trip;
+const { convertStringToTitle } = objectUtils;
+const {
+  createTrip, getAllTrips, cancelTrip, filterTripsByDestination,
+} = trip;
 
 export default class TripController {
   static async createTrip(req, res, next) {
@@ -12,7 +16,10 @@ export default class TripController {
       destination: tripDestination, trip_date: tripsDate, fare: tripFare,
     } = req.body;
 
-    const values = [tripBusId, tripOrigin, tripDestination, tripFare, tripsDate];
+    const values = [
+      tripBusId, convertStringToTitle(tripOrigin),
+      convertStringToTitle(tripDestination), tripFare, tripsDate,
+    ];
 
     try {
       const { rows } = await query(createTrip, values);
@@ -34,7 +41,15 @@ export default class TripController {
   }
 
   static async getAllTrips(req, res, next) {
+    const { destination } = req.query;
     try {
+      if (typeof (destination) !== 'undefined') {
+        const { rows } = await query(filterTripsByDestination, [convertStringToTitle(destination)]);
+        if (rows.length < 1) {
+          return res.status(404).json({ status: 'error', error: 'Trips not found' });
+        }
+        return res.status(200).json({ status: 'success', data: rows });
+      }
       const { rows } = await query(getAllTrips);
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'Trips not found' });
