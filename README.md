@@ -36,6 +36,12 @@ DATABASE_URL = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 ___
 
+## API Documentation
+
+The official API documentation for this project can be located here  
+[Way-Farer API Documentation](https://way-farerapp.herokuapp.com/api-docs)
+___
+
 
 ## Technologies Used
 * [Node.js](https://nodejs.org/en/) - A runtime environment based off of Chromes's V8 Engine for writing Javascript server-side applications.
@@ -77,7 +83,7 @@ The API endpoints are hosted on Heroku - [WAY-FARER](https://way-farerapp.heroku
 |--------------------|-------------------------------------------------------------------|
 |Sign Up             |firstname, lastname, email, password                              |
 |Sign In             |email, password                                                    |
-|Create a trip| trip id, bus id, origin, destination, trip date, fare   |
+|Create a trip| bus id, origin, destination, trip date, fare   |
 |Book a seat on a trip | trip id, seat number   |
 
 

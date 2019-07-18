@@ -1,0 +1,78 @@
+path:
+  /bookings:
+    post:
+      tags:
+      - User
+      summary: creates booking 
+      description: User can book a trip after choosing a seat number or a seat number would be automatically generated for them.
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: booking
+        description: Book a trip
+        schema:
+          $ref: '#/definitions/booking'
+      responses:
+        201: 
+          description: Booking was created successfully
+        404:
+          description: Trip not Found
+        400:
+          description: An error due to invalid trip id or seat number
+        409:
+          description: Seat number conflict
+    get:
+      tags:
+      - User
+      - Admin
+      summary: view bookings
+      description: User can only view their bookings while Admin can view all bookings
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      responses:
+        200: 
+          description: Successful operation
+        404:
+          description: Bookings not Found
+  /bookings/{id}:
+    delete:
+      tags:
+      - User
+      summary: User can delete/cancel a booking
+      description: User can cancel a booking
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: booking id
+        schema:
+          type: int
+          example: 5
+          required: true
+      responses:
+        200: 
+          description: Successful operation
+        404:
+          description: Booking not Found
+        401:
+          description: Unauthorized access
+definitions:
+  booking:
+    type: object
+    required:
+      - trip_id
+    properties:
+      trip_id:
+        type: int
+        example: 2
+      seat_number:
+        type: int
+        example: 10
