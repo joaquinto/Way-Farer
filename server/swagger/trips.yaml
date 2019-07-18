@@ -1,0 +1,104 @@
+path:
+  /trips:
+    post:
+      tags:
+      - Admin
+      summary: creates a trip 
+      description: On providing the valid inputs or parameter, a trip is created
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: trip
+        description: Trip to be created
+        schema:
+          $ref: '#/definitions/trip'
+      responses:
+        201: 
+          description: Trip has been created successfully
+        404:
+          description: Bus not Found
+        400:
+          description: An error occured relating to invalid inputs while creating a new customer
+        500:
+          description: Internal server error
+    get:
+      tags:
+      - Admin
+      - User
+      summary: View all trips
+      description: Users and Admin can view all trips
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      parameters:
+      - name: destination
+        in: query
+        description: Filter based on description
+        schema:
+          type: string
+          example: lagos
+      - name: origin
+        in: query
+        description: Filter based on origin
+        schema:
+          type: string
+          example: abuja
+      responses:
+        200: 
+          description: Successful operation
+        404:
+          description: Trips not Found
+  /trips/{id}:
+    patch:
+      tags:
+      - Admin
+      summary: Cancel a tip
+      description: Admin can cancel a particular trip after providing the trip id
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: loan id
+        schema:
+          type: int
+          example: 3
+          required: true
+      responses:
+        200: 
+          description: Successful operation
+        400:
+          description: Error due to invalid input
+        404:
+          description: Trip not Found 
+definitions:
+  trip:
+    type: object
+    required:
+      - bus_id
+      - origin
+      - destination
+      - trip_date
+      - fare
+    properties:
+      bus_id:
+        type: int
+        example: 2
+      origin:
+        type: string
+        example: kenya
+      destination:
+        type: string
+        example: Acrra
+      trip_date:
+        type: string
+        example: 2019-08-01
+      fare:
+        type: int
+        example: 20000

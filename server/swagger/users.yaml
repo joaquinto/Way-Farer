@@ -1,0 +1,77 @@
+path:
+  /auth/signup:
+    post:
+      tags:
+      - User
+      summary: Creates an account
+      description: On providing the valid inputs or parameter, an account is created for the user
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: user
+        description: User to be created
+        schema:
+          $ref: '#/definitions/user'
+      responses:
+        201: 
+          description: A new customer has been created successfully
+        409:
+          description: User conflict
+        400:
+          description: An error occured relating to invalid inputs while creating a new user
+  /auth/signin:
+    post:
+      tags:
+      - User
+      - Admin
+      summary: Signin to the website or application
+      description: On providing the valid inputs or parameter, the user will be granted access into the app
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: user
+        description: User to signin
+        schema:
+          $ref: '#/definitions/signin'
+      responses:
+        200: 
+          description: Signin successfully
+        404:
+          description: Not found
+        405:
+          description: An error occured relating to invalid inputs while signing a new user
+definitions:
+  user:
+    type: object
+    required:
+      - first_name
+      - last_name
+      - email
+      - password
+    properties:
+      first_name:
+        type: string
+        example: Adam
+      last_name:
+        type: string
+        example: Peter
+      email:
+        type: string
+        example: adamjohn@gmail.com
+      password:
+        type: string
+        example: adamjohn
+  signin:
+    type: object
+    required: 
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        example: adamjohn@gmail.com
+      password:
+        type: string
+        example: adamjohn
