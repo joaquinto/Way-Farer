@@ -18,7 +18,6 @@ export default class BookingController {
     } else {
       seatData.push(generateSeatNumber(req));
     }
-
     const values = [tripId, req.decoded.id, seatData, createdOn];
     try {
       const { rows } = await query(createBooking, values);

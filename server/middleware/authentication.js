@@ -110,7 +110,7 @@ export default class Authentication {
       req.seatNumbers = rows;
       req.capacity = capacity;
       const result = convertSeatObjectToArray(rows);
-      if (result.length < capacity.length) {
+      if (result.length + 1 === capacity) {
         return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
       }
       return next();
