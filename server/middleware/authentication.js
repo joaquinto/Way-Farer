@@ -80,19 +80,20 @@ export default class Authentication {
         if (result.length < capacity.length) {
           return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
         }
-        if (typeof (seatNumber) === 'undefined') {
+        if (typeof (seatNumber) !== 'undefined') {
+          const seatNum = filterItem(result, seatNumber.split(','));
+          if (seatNum.length > 0) {
+            return res.status(409).json({ status: 'error', error: seatNum });
+          }
+        } else {
           takenSeat = result;
           req.takenSeats = takenSeat;
-        }
-        const seatNum = filterItem(result, seatNumber.split(','));
-        if (seatNum.length > 0) {
-          return res.status(409).json({ status: 'error', error: seatNum });
         }
       }
       req.takenSeats = takenSeat;
       return next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return res.status(500).json({ status: 'error', error });
     }
   }
 

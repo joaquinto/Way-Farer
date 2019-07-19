@@ -12,7 +12,7 @@ describe('Create Booking', () => {
   before(async () => {
     const res = await chai.request(app)
       .post('/api/v1/auth/signin')
-      .send(data.specialSignIn);
+      .send(data.draftBookingSignIn);
     userToken = res.body.data.token;
   });
 
@@ -29,13 +29,13 @@ describe('Create Booking', () => {
     assert.property((res.body), 'error');
   });
 
-  it('should throw an error for missing seat number', async () => {
+  it('should return an object of bookings without seat number', async () => {
     const res = await request
       .post('/api/v1/bookings')
       .set('Token', userToken)
       .send(data.missingSeatNumber);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
   });
 
   it('should throw an error for empty trip id', async () => {
@@ -89,6 +89,15 @@ describe('Create Booking', () => {
       .send(data.createTrip);
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
+  });
+
+  it('should return an object of bookings with seat number', async () => {
+    const res = await request
+      .post('/api/v1/bookings')
+      .set('Token', userToken)
+      .send(data.booking);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
   });
 });
 

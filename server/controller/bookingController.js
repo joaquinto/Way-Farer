@@ -13,7 +13,6 @@ export default class BookingController {
     let seatData = [];
     const { seat_number: seatNumber, trip_id: tripId } = req.body;
     const createdOn = new Date();
-    console.log('>>>>>>>>>>>>>>>>>>>>', seatNumber);
     if (typeof (seatNumber) !== 'undefined') {
       seatData = seatNumber.split(',');
     } else {
