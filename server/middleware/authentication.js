@@ -70,31 +70,20 @@ export default class Authentication {
   static async isSeatNumberExist(req, res, next) {
     let takenSeat = [];
     const { seat_number: seatNumber } = req.body;
-    try {
-      const { rows } = await query(getSeatNumbers);
-      const { rows: newRows } = await query(getBusCapacity, [req.body.trip_id]);
-      const [{ capacity }] = newRows;
-      req.capacity = capacity;
-      if (rows.length > 0) {
-        const result = convertSeatObjectToArray(rows);
-        if (result.length < capacity.length) {
-          return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
+    if (req.seatNumbers.length > 0) {
+      const result = convertSeatObjectToArray(req.seatNumbers);
+      if (typeof (seatNumber) !== 'undefined') {
+        const seatNum = filterItem(result, seatNumber.split(','));
+        if (seatNum.length > 0) {
+          return res.status(409).json({ status: 'error', error: seatNum });
         }
-        if (typeof (seatNumber) !== 'undefined') {
-          const seatNum = filterItem(result, seatNumber.split(','));
-          if (seatNum.length > 0) {
-            return res.status(409).json({ status: 'error', error: seatNum });
-          }
-        } else {
-          takenSeat = result;
-          req.takenSeats = takenSeat;
-        }
+      } else {
+        takenSeat = result;
+        req.takenSeats = takenSeat;
       }
-      req.takenSeats = takenSeat;
-      return next();
-    } catch (error) {
-      return res.status(500).json({ status: 'error', error });
     }
+    req.takenSeats = takenSeat;
+    return next();
   }
 
   static async isOwner(req, res, next) {
@@ -106,6 +95,23 @@ export default class Authentication {
       const [{ user_id: userId }] = rows;
       if (req.decoded.id !== userId) {
         return res.status(401).json({ status: 'error', error: 'Unauthorized access' });
+      }
+      return next();
+    } catch (error) {
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+    }
+  }
+
+  static async isSeatFullyBooked(req, res, next) {
+    try {
+      const { rows } = await query(getSeatNumbers);
+      const { rows: newRows } = await query(getBusCapacity, [req.body.trip_id]);
+      const [{ capacity }] = newRows;
+      req.seatNumbers = rows;
+      req.capacity = capacity;
+      const result = convertSeatObjectToArray(rows);
+      if (result.length < capacity.length) {
+        return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
       }
       return next();
     } catch (error) {
