@@ -9,7 +9,7 @@ const { query } = db;
 const { findUserByEmail } = users;
 const { findBusById, getBusCapacity } = bus;
 const { getTrip } = trip;
-const { getSeatNumbers, checkForUser, getBooking } = booking;
+const { getSeatNumbers, getBooking } = booking;
 const { convertSeatObjectToArray, filterItem } = objectUtils;
 
 export default class Authentication {
@@ -22,7 +22,7 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -36,7 +36,7 @@ export default class Authentication {
       req.user = rows;
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -63,22 +63,7 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
-    }
-  }
-
-  static async hasUserBooked(req, res, next) {
-    try {
-      const { rows } = await query(checkForUser, [req.decoded.id]);
-      if (rows.length > 0) {
-        return res.status(409).json({
-          status: 'error',
-          error: 'You have already booked for this trip. If you want to book another seat for this trip, Kindly cancel your previous booking and select multiple seat number from the available seats for this trip.',
-        });
-      }
-      return next();
-    } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -107,7 +92,7 @@ export default class Authentication {
       req.takenSeats = takenSeat;
       return next();
     } catch (error) {
-      return next();
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -123,7 +108,7 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -135,7 +120,7 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 }

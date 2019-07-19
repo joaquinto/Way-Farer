@@ -24,6 +24,8 @@ path:
           description: An error due to invalid trip id or seat number
         409:
           description: Seat number conflict
+        500:
+          description: Internal server error
     get:
       tags:
       - User
@@ -39,6 +41,8 @@ path:
           description: Successful operation
         404:
           description: Bookings not Found
+        500:
+          description: Internal server error
   /bookings/{id}:
     delete:
       tags:
@@ -64,6 +68,8 @@ path:
           description: Booking not Found
         401:
           description: Unauthorized access
+        500:
+          description: Internal server error
 definitions:
   booking:
     type: object

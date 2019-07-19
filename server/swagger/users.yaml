@@ -20,6 +20,8 @@ path:
           description: User conflict
         400:
           description: An error occured relating to invalid inputs while creating a new user
+        500:
+          description: Internal server error
   /auth/signin:
     post:
       tags:
@@ -42,6 +44,8 @@ path:
           description: Not found
         405:
           description: An error occured relating to invalid inputs while signing a new user
+        500:
+          description: Internal server error
 definitions:
   user:
     type: object

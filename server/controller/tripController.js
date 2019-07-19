@@ -11,7 +11,7 @@ const {
 } = trip;
 
 export default class TripController {
-  static async createTrip(req, res, next) {
+  static async createTrip(req, res) {
     const {
       bus_id: tripBusId, origin: tripOrigin,
       destination: tripDestination, trip_date: tripsDate, fare: tripFare,
@@ -37,11 +37,11 @@ export default class TripController {
       };
       return res.status(201).json({ status: 'success', data });
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
-  static async getAllTrips(req, res, next) {
+  static async getAllTrips(req, res) {
     const { destination, origin } = req.query;
     try {
       if (typeof (destination) !== 'undefined') {
@@ -64,16 +64,16 @@ export default class TripController {
       }
       return res.status(200).json({ status: 'success', data: rows });
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
-  static async cancelTrip(req, res, next) {
+  static async cancelTrip(req, res) {
     try {
       await query(cancelTrip, [false, req.params.id]);
       return res.status(200).json({ status: 'success', data: { message: 'Trip cancelled successfully' } });
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 }

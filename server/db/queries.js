@@ -31,7 +31,6 @@ const createTable = {
     user_id INTEGER NOT NULL,
     seat_number INTEGER[] NOT NULL,
     created_on TIMESTAMP NOT NULL,
-    PRIMARY KEY (user_id, trip_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (trip_id) REFERENCES trip (id)
   )`,
