@@ -34,11 +34,11 @@ export default class UserController {
       };
       return res.status(201).json({ status: 'success', data });
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
-  static async signIn(req, res, next) {
+  static async signIn(req, res) {
     const userEmail = req.body.email.toLowerCase();
     const userPassword = req.body.password;
     try {
@@ -63,7 +63,7 @@ export default class UserController {
       }
       return res.status(405).json({ status: 'error', error: 'Incorrect password, input the correct password.' });
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 }

@@ -52,6 +52,8 @@ path:
           description: Successful operation
         404:
           description: Trips not Found
+        500:
+          description: Internal server error
   /trips/{id}:
     patch:
       tags:
@@ -76,7 +78,9 @@ path:
         400:
           description: Error due to invalid input
         404:
-          description: Trip not Found 
+          description: Trip not Found
+        500:
+          description: Internal server error
 definitions:
   trip:
     type: object

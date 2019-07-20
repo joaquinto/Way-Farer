@@ -77,9 +77,7 @@ export default class validator {
       .isInt()
       .withMessage('Fare should be an integer.')
       .isInt({ gt: 15 })
-      .withMessage('Fare should be greater than 15.')
-      .isInt({ lt: 50000 })
-      .withMessage('Fare should be less than 50,000.');
+      .withMessage('Fare should be greater than 15.');
     req.asyncValidationErrors()
       .then(next)
       .catch(errors => res.status(400).json({

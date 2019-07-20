@@ -12,7 +12,7 @@ describe('Create Booking', () => {
   before(async () => {
     const res = await chai.request(app)
       .post('/api/v1/auth/signin')
-      .send(data.specialSignIn);
+      .send(data.draftBookingSignIn);
     userToken = res.body.data.token;
   });
 
@@ -29,13 +29,13 @@ describe('Create Booking', () => {
     assert.property((res.body), 'error');
   });
 
-  it('should throw an error for missing seat number', async () => {
+  it('should return an object of bookings without seat number', async () => {
     const res = await request
       .post('/api/v1/bookings')
       .set('Token', userToken)
       .send(data.missingSeatNumber);
-    assert.equal((res.body.status), 'error');
-    assert.property((res.body), 'error');
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
   });
 
   it('should throw an error for empty trip id', async () => {
@@ -90,27 +90,12 @@ describe('Create Booking', () => {
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
   });
-});
 
-describe('Create Booking misc', () => {
-  let request;
-  let userToken;
-  before(async () => {
-    const res = await chai.request(app)
-      .post('/api/v1/auth/signin')
-      .send(data.draftBookingSignIn);
-    userToken = res.body.data.token;
-  });
-
-  beforeEach(async () => {
-    request = await chai.request(app);
-  });
-
-  it('should return an array of object for the user bookings', async () => {
+  it('should return an object of bookings with seat number', async () => {
     const res = await request
       .post('/api/v1/bookings')
       .set('Token', userToken)
-      .send(data.missingSeatNumber);
+      .send(data.booking);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'data');
   });

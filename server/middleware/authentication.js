@@ -9,7 +9,7 @@ const { query } = db;
 const { findUserByEmail } = users;
 const { findBusById, getBusCapacity } = bus;
 const { getTrip } = trip;
-const { getSeatNumbers, checkForUser, getBooking } = booking;
+const { getSeatNumbers, getBooking } = booking;
 const { convertSeatObjectToArray, filterItem } = objectUtils;
 
 export default class Authentication {
@@ -22,7 +22,7 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -36,7 +36,7 @@ export default class Authentication {
       req.user = rows;
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -63,52 +63,27 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
-    }
-  }
-
-  static async hasUserBooked(req, res, next) {
-    try {
-      const { rows } = await query(checkForUser, [req.decoded.id]);
-      if (rows.length > 0) {
-        return res.status(409).json({
-          status: 'error',
-          error: 'You have already booked for this trip. If you want to book another seat for this trip, Kindly cancel your previous booking and select multiple seat number from the available seats for this trip.',
-        });
-      }
-      return next();
-    } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
   static async isSeatNumberExist(req, res, next) {
     let takenSeat = [];
     const { seat_number: seatNumber } = req.body;
-    try {
-      const { rows } = await query(getSeatNumbers);
-      const { rows: newRows } = await query(getBusCapacity, [req.body.trip_id]);
-      const [{ capacity }] = newRows;
-      req.capacity = capacity;
-      if (rows.length > 0) {
-        const result = convertSeatObjectToArray(rows);
-        if (result.length < capacity.length) {
-          return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
-        }
-        if (typeof (seatNumber) === 'undefined') {
-          takenSeat = result;
-          req.takenSeats = takenSeat;
-        }
+    if (req.seatNumbers.length > 0) {
+      const result = convertSeatObjectToArray(req.seatNumbers);
+      if (typeof (seatNumber) !== 'undefined') {
         const seatNum = filterItem(result, seatNumber.split(','));
         if (seatNum.length > 0) {
           return res.status(409).json({ status: 'error', error: seatNum });
         }
+      } else {
+        takenSeat = result;
+        req.takenSeats = takenSeat;
       }
-      req.takenSeats = takenSeat;
-      return next();
-    } catch (error) {
-      return next();
     }
+    req.takenSeats = takenSeat;
+    return next();
   }
 
   static async isOwner(req, res, next) {
@@ -123,7 +98,24 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+    }
+  }
+
+  static async isSeatFullyBooked(req, res, next) {
+    try {
+      const { rows } = await query(getSeatNumbers, [req.body.trip_id]);
+      const { rows: newRows } = await query(getBusCapacity, [req.body.trip_id]);
+      const [{ capacity }] = newRows;
+      req.seatNumbers = rows;
+      req.capacity = capacity;
+      const result = convertSeatObjectToArray(rows);
+      if (result.length + 1 === capacity) {
+        return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
+      }
+      return next();
+    } catch (error) {
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 
@@ -135,7 +127,7 @@ export default class Authentication {
       }
       return next();
     } catch (error) {
-      return next(error);
+      return res.status(500).json({ status: 'error', error: 'Internal server error' });
     }
   }
 }

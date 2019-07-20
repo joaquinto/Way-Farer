@@ -31,7 +31,6 @@ const createTable = {
     user_id INTEGER NOT NULL,
     seat_number INTEGER[] NOT NULL,
     created_on TIMESTAMP NOT NULL,
-    PRIMARY KEY (user_id, trip_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (trip_id) REFERENCES trip (id)
   )`,
@@ -66,8 +65,8 @@ const seedData = {
     (2, 'Abuja', 'Lagos', '10000.00', '2019-10-06')`,
 
   bookingTable: `INSERT INTO
-    booking(trip_id, user_id, seat_number, created_on)
-      VALUES(1, '2', '{6}', '2019-10-09')`,
+  booking(trip_id, user_id, seat_number, created_on)
+    VALUES(1, '2', '{6}', '2019-10-09')`,
 };
 
 export {

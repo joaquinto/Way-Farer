@@ -37,10 +37,6 @@ app.use('*', (req, res, next) => {
   res.status(404).json({ status: 'error', error: 'Page not found' });
 });
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ status: 'error', error: err.message });
-});
-
 app.listen(port, () => {
   console.log(`server running on port ${port}`);
 });
