@@ -6,7 +6,7 @@ const bookingQueries = {
 
   getCurrentBooking: 'SELECT booking.id, booking.trip_id, booking.user_id, trip.bus_id, trip.trip_date, booking.seat_number, users.first_name, users.last_name, users.email FROM trip INNER JOIN booking On booking.trip_id = trip.id INNER JOIN users ON booking.user_id = users.user_id WHERE booking.id = $1',
 
-  getSeatNumbers: 'SELECT seat_number FROM booking',
+  getSeatNumbers: 'SELECT seat_number FROM booking WHERE trip_id = $1',
 
   getBooking: 'SELECT * FROM booking WHERE id = $1',
 
