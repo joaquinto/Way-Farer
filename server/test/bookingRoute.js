@@ -74,6 +74,15 @@ describe('Create Booking', () => {
     assert.property((res.body), 'error');
   });
 
+  it('should throw an error for invalid seat number', async () => {
+    const res = await request
+      .post('/api/v1/bookings')
+      .set('Token', userToken)
+      .send(data.sameUserBooking);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
   it('should throw an error for empty token', async () => {
     const res = await request
       .post('/api/v1/bookings')
@@ -96,6 +105,24 @@ describe('Create Booking', () => {
       .post('/api/v1/bookings')
       .set('Token', userToken)
       .send(data.booking);
+    assert.equal((res.body.status), 'success');
+    assert.property((res.body), 'data');
+  });
+
+  it('should throw an error for duplicate booking', async () => {
+    const res = await request
+      .post('/api/v1/bookings')
+      .set('Token', userToken)
+      .send(data.booking);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
+  it('should return an object of bookings with seat number for multiple booking', async () => {
+    const res = await request
+      .post('/api/v1/bookings')
+      .set('Token', userToken)
+      .send(data.duplicateBooking);
     assert.equal((res.body.status), 'success');
     assert.property((res.body), 'data');
   });

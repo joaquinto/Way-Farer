@@ -70,6 +70,9 @@ export default class Authentication {
   static async isSeatNumberExist(req, res, next) {
     let takenSeat = [];
     const { seat_number: seatNumber } = req.body;
+    if ((typeof (seatNumber) !== 'undefined') && (typeof (seatNumber) !== 'string')) {
+      return res.status(400).json({ status: 'error', error: 'Seat number should be a string' });
+    }
     if (req.seatNumbers.length > 0) {
       const result = convertSeatObjectToArray(req.seatNumbers);
       if (typeof (seatNumber) !== 'undefined') {

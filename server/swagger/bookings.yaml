@@ -80,5 +80,5 @@ definitions:
         type: int
         example: 2
       seat_number:
-        type: int
+        type: string
         example: 10
