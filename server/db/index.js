@@ -15,7 +15,6 @@ export default class Query {
       result = await client.query(queryStrings, values);
       return result;
     } catch (error) {
-      console.log(error);
       return error;
     } finally {
       client.release();

@@ -227,7 +227,7 @@ const data = {
   },
   duplicateBooking: {
     trip_id: 1,
-    seat_number: 5,
+    seat_number: '7',
   },
   sameUserBooking: {
     trip_id: 1,
