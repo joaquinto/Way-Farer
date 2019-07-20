@@ -118,6 +118,15 @@ describe('Create Booking', () => {
     assert.property((res.body), 'error');
   });
 
+  it('should throw an error for trip not found', async () => {
+    const res = await request
+      .post('/api/v1/bookings')
+      .set('Token', userToken)
+      .send(data.tripIdNotFound);
+    assert.equal((res.body.status), 'error');
+    assert.property((res.body), 'error');
+  });
+
   it('should return an object of bookings with seat number for multiple booking', async () => {
     const res = await request
       .post('/api/v1/bookings')

@@ -18,10 +18,14 @@ path:
       responses:
         201: 
           description: Booking was created successfully
-        404:
-          description: Trip not Found
         400:
           description: An error due to invalid trip id or seat number
+        401:
+          description: Unauthorized access
+        403:
+          description: Token not provided
+        404:
+          description: Trip not Found
         409:
           description: Seat number conflict
         500:
@@ -39,6 +43,10 @@ path:
       responses:
         200: 
           description: Successful operation
+        401:
+          description: Unauthorized access
+        403:
+          description: Token not provided
         404:
           description: Bookings not Found
         500:
@@ -64,10 +72,14 @@ path:
       responses:
         200: 
           description: Successful operation
-        404:
-          description: Booking not Found
+        400:
+          description: Error due to invalid booking id
         401:
           description: Unauthorized access
+        403:
+          description: Token not provided
+        404:
+          description: Booking not Found
         500:
           description: Internal server error
 definitions:
@@ -81,4 +93,4 @@ definitions:
         example: 2
       seat_number:
         type: string
-        example: 10
+        example: '10'

@@ -18,10 +18,14 @@ path:
       responses:
         201: 
           description: Trip has been created successfully
+        400:
+          description: An error occured relating to invalid inputs while creating a new trip
+        401:
+          description: Unauthorized access
+        403:
+          description: Token not provided
         404:
           description: Bus not Found
-        400:
-          description: An error occured relating to invalid inputs while creating a new customer
         500:
           description: Internal server error
     get:
@@ -50,6 +54,10 @@ path:
       responses:
         200: 
           description: Successful operation
+        401:
+          description: Unauthorized access
+        403:
+          description: Token not provided
         404:
           description: Trips not Found
         500:
@@ -76,7 +84,11 @@ path:
         200: 
           description: Successful operation
         400:
-          description: Error due to invalid input
+          description: Error due to invalid trip id
+        401:
+          description: Unauthorized access
+        403:
+          description: Token not provided
         404:
           description: Trip not Found
         500:
