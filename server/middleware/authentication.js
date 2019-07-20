@@ -104,7 +104,6 @@ export default class Authentication {
 
   static async isSeatFullyBooked(req, res, next) {
     try {
-      console.log('>>>>>>>>>>>>>>>>>>>>>>> trip id', req.body.trip_id);
       const { rows } = await query(getSeatNumbers, [req.body.trip_id]);
       const { rows: newRows } = await query(getBusCapacity, [req.body.trip_id]);
       const [{ capacity }] = newRows;
