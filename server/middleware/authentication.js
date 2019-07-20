@@ -123,14 +123,15 @@ export default class Authentication {
   }
 
   static async isTripExist(req, res, next) {
+    const value = req.body.trip_id || req.params.id;
     try {
-      const { rows } = await query(getTrip, [req.params.id]);
+      const { rows } = await query(getTrip, [value]);
       if (rows.length < 1) {
         return res.status(404).json({ status: 'error', error: 'Trip not Found' });
       }
       return next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return res.status(500).json({ status: 'error', error: `Internal server error${  error}` });
     }
   }
 }
