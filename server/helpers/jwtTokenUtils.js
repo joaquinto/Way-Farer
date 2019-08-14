@@ -1,4 +1,9 @@
 import jwt from 'jsonwebtoken';
+import responseHelper from './responseHelper';
+import status from './status';
+import errorHelpers from './errorHelpers';
+
+const { responseError } = responseHelper;
 
 export default class JwtToken {
   static signToken(userId, userEmail, isAdmin) {
@@ -11,11 +16,11 @@ export default class JwtToken {
     const key = process.env.SECRET_KEY;
     const tokenHeaders = req.headers.token;
     if (!tokenHeaders) {
-      return res.status(403).json({ status: 'error', error: 'No token provided' });
+      return responseError(res, status.forbidden, errorHelpers.noToken);
     }
     jwt.verify(tokenHeaders, key, (error, decoded) => {
       if (error) {
-        return res.status(401).json({ status: 'error', error: 'Invalid token provided' });
+        return responseError(res, status.unauthorizedAccess, errorHelpers.invalidToken);
       }
       req.decoded = decoded;
       return req.decoded;

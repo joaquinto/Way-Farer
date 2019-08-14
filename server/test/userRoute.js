@@ -100,12 +100,12 @@ describe('Sign Up', () => {
     assert.equal((res.body.data), 'Welcome to WayFarer ...');
   });
 
-  it('should return status 404', async () => {
+  it('should return status 404 for page not found', async () => {
     const res = await chai.request(app)
       .get('/homy');
     assert.equal((res.body.status), 'error');
     assert.property((res.body), 'error');
-    assert.equal((res.body.error), 'Page not found');
+    assert.equal((res.body.error), 'Page not Found');
   });
 });
 

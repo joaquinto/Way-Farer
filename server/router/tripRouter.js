@@ -10,11 +10,12 @@ const { createTrip, getAllTrips, cancelTrip } = tripController;
 const { verifyToken } = jwtUtils;
 const { isAdmin, isBusExist, isTripExist } = authentication;
 const { tripValidation, tripIdParams, viewTrips } = validator;
+const tripUrl = '/trips';
 
-router.post('/trips', tripValidation, verifyToken, isAdmin, isBusExist, createTrip);
+router.post(`${tripUrl}`, tripValidation, verifyToken, isAdmin, isBusExist, createTrip);
 
-router.get('/trips', viewTrips, verifyToken, getAllTrips);
+router.get(`${tripUrl}`, viewTrips, verifyToken, getAllTrips);
 
-router.patch('/trips/:id', tripIdParams, isTripExist, verifyToken, isAdmin, cancelTrip);
+router.patch(`${tripUrl}/:id`, tripIdParams, isTripExist, verifyToken, isAdmin, cancelTrip);
 
 export default router;

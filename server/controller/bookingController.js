@@ -1,9 +1,13 @@
 import db from '../db/index';
 import booking from '../model/booking';
 import objectUtils from '../helpers/objectUtils';
+import responseHelper from '../helpers/responseHelper';
+import status from '../helpers/status';
+import errorHelpers from '../helpers/errorHelpers';
 
 const { query } = db;
 const { generateSeatNumber } = objectUtils;
+const { responseError, responseSuccess } = responseHelper;
 const {
   createBooking, getUserBooking, getCurrentBooking, getAllBookings, deleteBooking,
 } = booking;
@@ -23,24 +27,9 @@ export default class BookingController {
       const { rows } = await query(createBooking, values);
       const [{ id: newId }] = rows;
       const { rows: result } = await query(getCurrentBooking, [newId]);
-      const [{
-        // eslint-disable-next-line camelcase
-        id, trip_id, user_id, bus_id, trip_date, seat_number, first_name, last_name, email,
-      }] = result;
-      const data = {
-        id,
-        trip_id,
-        user_id,
-        bus_id,
-        trip_date,
-        seat_number,
-        first_name,
-        last_name,
-        email,
-      };
-      return res.status(201).json({ status: 'success', data });
+      return responseSuccess(res, status.created, result[0]);
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
@@ -48,24 +37,24 @@ export default class BookingController {
     try {
       if (req.decoded.admin) {
         const { rows } = await query(getAllBookings);
-        return res.status(200).json({ status: 'success', data: rows });
+        return responseSuccess(res, status.ok, rows);
       }
       const { rows } = await query(getUserBooking, [req.decoded.id]);
-      if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'No data Found' });
-      }
-      return res.status(200).json({ status: 'success', data: rows });
+      return rows.length < 1
+        ? responseError(res, status.notFound, errorHelpers.bookingsNotFound)
+        : responseSuccess(res, status.ok, rows);
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
   static async deleteBooking(req, res) {
     try {
       await query(deleteBooking, [req.params.id]);
-      return res.status(200).json({ status: 'success', data: { message: 'Booking deleted successfully' } });
+      const responseMessage = { message: errorHelpers.deleteBooking };
+      return responseSuccess(res, status.ok, responseMessage);
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 }

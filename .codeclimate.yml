@@ -29,5 +29,7 @@ checks:
 exclude_patterns:
   - node_modules/
   - server/test/
+  - server/db/
+  - server/middleware/validator.js
   - server/index.js
   - dist/

@@ -4,11 +4,15 @@ import bus from '../model/bus';
 import booking from '../model/booking';
 import trip from '../model/trips';
 import objectUtils from '../helpers/objectUtils';
+import responseHelper from '../helpers/responseHelper';
+import status from '../helpers/status';
+import errorHelpers from '../helpers/errorHelpers';
 
 const { query } = db;
 const { findUserByEmail } = users;
 const { findBusById, getBusCapacity } = bus;
 const { getTrip } = trip;
+const { responseError } = responseHelper;
 const { getSeatNumbers, getBooking } = booking;
 const { convertSeatObjectToArray, filterItem } = objectUtils;
 
@@ -17,12 +21,11 @@ export default class Authentication {
     const { email } = req.body;
     try {
       const { rows } = await query(findUserByEmail, [email.toLowerCase()]);
-      if (rows.length > 0) {
-        return res.status(409).json({ status: 'error', error: 'User already exist' });
-      }
-      return next();
+      return rows.length > 0
+        ? responseError(res, status.conflict, errorHelpers.userExist)
+        : next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
@@ -31,12 +34,12 @@ export default class Authentication {
     try {
       const { rows } = await query(findUserByEmail, [email.toLowerCase()]);
       if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'User Not Found' });
+        return responseError(res, status.notFound, errorHelpers.userNotFound);
       }
       req.user = rows;
       return next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
@@ -58,12 +61,11 @@ export default class Authentication {
     const { bus_id: busId } = req.body;
     try {
       const { rows } = await query(findBusById, [busId]);
-      if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'Bus not Found' });
-      }
-      return next();
+      return rows.length < 1
+        ? responseError(res, status.notFound, errorHelpers.busNotFound)
+        : next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
@@ -71,14 +73,14 @@ export default class Authentication {
     let takenSeat = [];
     const { seat_number: seatNumber } = req.body;
     if ((typeof (seatNumber) !== 'undefined') && (typeof (seatNumber) !== 'string')) {
-      return res.status(400).json({ status: 'error', error: 'Seat number should be a string' });
+      return responseError(res, status.badRequest, errorHelpers.seatNumberError);
     }
     if (req.seatNumbers.length > 0) {
       const result = convertSeatObjectToArray(req.seatNumbers);
       if (typeof (seatNumber) !== 'undefined') {
         const seatNum = filterItem(result, seatNumber.split(','));
         if (seatNum.length > 0) {
-          return res.status(409).json({ status: 'error', error: seatNum });
+          return responseError(res, status.conflict, seatNum);
         }
       } else {
         takenSeat = result;
@@ -93,15 +95,14 @@ export default class Authentication {
     try {
       const { rows } = await query(getBooking, [req.params.id]);
       if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'Booking not Found' });
+        return responseError(res, status.notFound, errorHelpers.bookingsNotFound);
       }
       const [{ user_id: userId }] = rows;
-      if (req.decoded.id !== userId) {
-        return res.status(401).json({ status: 'error', error: 'Unauthorized access' });
-      }
-      return next();
+      return req.decoded.id !== userId
+        ? responseError(res, status.unauthorizedAccess, errorHelpers.unauthorizedAccess)
+        : next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
@@ -113,12 +114,11 @@ export default class Authentication {
       req.seatNumbers = rows;
       req.capacity = capacity;
       const result = convertSeatObjectToArray(rows);
-      if (result.length + 1 === capacity) {
-        return res.status(409).json({ status: 'error', error: 'These seats has been fully booked for this trip. Kindly book a seat from another bus going to the same destination.' });
-      }
-      return next();
+      return result.length + 1 === capacity
+        ? responseError(res, status.conflict, errorHelpers.fullyBooked)
+        : next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
@@ -126,12 +126,11 @@ export default class Authentication {
     const value = req.body.trip_id || req.params.id;
     try {
       const { rows } = await query(getTrip, [value]);
-      if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'Trip not Found' });
-      }
-      return next();
+      return rows.length < 1
+        ? responseError(res, status.notFound, errorHelpers.tripsNotFound)
+        : next();
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: `Internal server error${  error}` });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 }

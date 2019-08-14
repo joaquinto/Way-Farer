@@ -11,11 +11,12 @@ const {
 } = authentication;
 const { bookingValidator, bookingIdParams } = validator;
 const { createBooking, viewBookings, deleteBooking } = bookingController;
+const bookingUrl = '/bookings';
 
-router.post('/bookings', bookingValidator, isTripExist, isSeatFullyBooked, isSeatNumberExist, verifyToken, isUser, createBooking);
+router.post(`${bookingUrl}`, bookingValidator, isTripExist, isSeatFullyBooked, isSeatNumberExist, verifyToken, isUser, createBooking);
 
-router.get('/bookings', verifyToken, viewBookings);
+router.get(`${bookingUrl}`, verifyToken, viewBookings);
 
-router.delete('/bookings/:id', bookingIdParams, verifyToken, isUser, isOwner, deleteBooking);
+router.delete(`${bookingUrl}/:id`, bookingIdParams, verifyToken, isUser, isOwner, deleteBooking);
 
 export default router;

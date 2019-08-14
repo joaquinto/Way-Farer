@@ -2,9 +2,13 @@
 import db from '../db/index';
 import trip from '../model/trips';
 import objectUtils from '../helpers/objectUtils';
+import responseHelper from '../helpers/responseHelper';
+import status from '../helpers/status';
+import errorHelpers from '../helpers/errorHelpers';
 
 const { query } = db;
 const { convertStringToTitle } = objectUtils;
+const { responseError, responseSuccess } = responseHelper;
 const {
   createTrip, getAllTrips, cancelTrip, filterTripsByDestination,
   filterTripsByOrigin,
@@ -24,20 +28,9 @@ export default class TripController {
 
     try {
       const { rows } = await query(createTrip, values);
-      const [{
-        id, bus_id, origin, destination, trip_date, fare,
-      }] = rows;
-      const data = {
-        id,
-        bus_id,
-        origin,
-        destination,
-        trip_date,
-        fare,
-      };
-      return res.status(201).json({ status: 'success', data });
+      return responseSuccess(res, status.created, rows[0]);
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
@@ -46,34 +39,32 @@ export default class TripController {
     try {
       if (typeof (destination) !== 'undefined') {
         const { rows } = await query(filterTripsByDestination, [convertStringToTitle(destination)]);
-        if (rows.length < 1) {
-          return res.status(404).json({ status: 'error', error: 'Trips not found' });
-        }
-        return res.status(200).json({ status: 'success', data: rows });
+        return rows.length < 1
+          ? responseError(res, status.notFound, errorHelpers.tripsNotFound)
+          : responseSuccess(res, status.ok, rows);
       }
       if (typeof (origin) !== 'undefined') {
         const { rows } = await query(filterTripsByOrigin, [convertStringToTitle(origin)]);
-        if (rows.length < 1) {
-          return res.status(404).json({ status: 'error', error: 'Trips not found' });
-        }
-        return res.status(200).json({ status: 'success', data: rows });
+        return rows.length < 1
+          ? responseError(res, status.notFound, errorHelpers.tripsNotFound)
+          : responseSuccess(res, status.ok, rows);
       }
       const { rows } = await query(getAllTrips);
-      if (rows.length < 1) {
-        return res.status(404).json({ status: 'error', error: 'Trips not found' });
-      }
-      return res.status(200).json({ status: 'success', data: rows });
+      return rows.length < 1
+        ? responseError(res, status.notFound, errorHelpers.tripsNotFound)
+        : responseSuccess(res, status.ok, rows);
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 
   static async cancelTrip(req, res) {
     try {
       await query(cancelTrip, [false, req.params.id]);
-      return res.status(200).json({ status: 'success', data: { message: 'Trip cancelled successfully' } });
+      const responseMessage = { message: errorHelpers.cancelTrip };
+      return responseSuccess(res, status.ok, responseMessage);
     } catch (error) {
-      return res.status(500).json({ status: 'error', error: 'Internal server error' });
+      return responseError(res, status.internalServerError, errorHelpers.serverError);
     }
   }
 }

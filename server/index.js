@@ -10,12 +10,17 @@ import users from './router/userRouter';
 import trips from './router/tripRouter';
 import bookings from './router/bookingRouter';
 import swaggerSpec from './configuration/swagger';
+import responseHelper from './helpers/responseHelper';
+import status from './helpers/status';
+import errorHelpers from './helpers/errorHelpers';
 
 dotenv.config();
 
 const app = express();
 
 const port = process.env.PORT;
+
+const appUrl = '/api/v1/';
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,14 +32,14 @@ app.get('/', (req, res) => {
   res.status(200).json({ status: 'success', data: 'Welcome to WayFarer ...' });
 });
 
-app.use('/api/v1/', users);
-app.use('/api/v1/', trips);
-app.use('/api/v1/', bookings);
+app.use(`${appUrl}`, users);
+app.use(`${appUrl}`, trips);
+app.use(`${appUrl}`, bookings);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('*', (req, res, next) => {
-  res.status(404).json({ status: 'error', error: 'Page not found' });
+  responseHelper.responseError(res, status.notFound, errorHelpers.pageNotFound);
 });
 
 app.listen(port, () => {

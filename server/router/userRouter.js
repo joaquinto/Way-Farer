@@ -7,9 +7,10 @@ const router = express.Router();
 const { isUserExist, notAUser } = authentication;
 const { signUpValidation, signInValidation } = validator;
 const { signUp, signIn } = userController;
+const authUrl = '/auth';
 
-router.post('/auth/signup', signUpValidation, isUserExist, signUp);
+router.post(`${authUrl}/signup`, signUpValidation, isUserExist, signUp);
 
-router.post('/auth/signin', signInValidation, notAUser, signIn);
+router.post(`${authUrl}/signin`, signInValidation, notAUser, signIn);
 
 export default router;

@@ -28,29 +28,15 @@ export default class ObjectUtils {
     return messageList;
   }
 
-  static randomArray(limit) {
-    const numberArray = [];
-    for (let i = 1; i < limit + 1; i++) {
-      numberArray.push(i);
-    }
-    return numberArray;
-  }
-
   static generateSeatNumber(req) {
     let seatNumber = '';
-    const numbers = ObjectUtils.randomArray(req.capacity);
+    const numbers = Array.from({ length: req.capacity }, (x, value) => value + 1);
     const exclude = req.takenSeats;
     exclude.push(1);
-    const filtered = [];
+    const availableSeat = numbers.filter(value => !exclude.includes(value));
 
-    numbers.forEach((values) => {
-      if (exclude.indexOf(values) === -1) {
-        filtered.push(values);
-      }
-    });
-
-    const randomSeat = Math.floor(Math.random() * filtered.length);
-    seatNumber = filtered[randomSeat];
+    const randomSeat = Math.floor(Math.random() * availableSeat.length);
+    seatNumber = availableSeat[randomSeat];
     return seatNumber;
   }
 
